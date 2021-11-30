@@ -10,7 +10,7 @@ class ClassificationTest(unittest.TestCase):
 
     def test_preprocessing(self):
         t1 = "This is definitely a sentence."
-        p = Preprocessor()
+        p = Preprocessor({})
 
         d = p.preprocess(t1)
         self.assertEqual(d["strQuery"], t1)
@@ -36,6 +36,28 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(d["meta"].iloc[8]["wordId"], 2)
         # TODO more throughoughough testing?
     
-    def test_classification(self):
-        # TODO
-        pass
+    def test_classification_empty(self):
+        t1 = "This is definitely a sentence."
+        p = Preprocessor({})
+        c, d = p.classify(t1)
+        self.assertEqual(c, "wikipedia")
+        self.assertEqual(d, tuple([]))
+
+    def test_classification_basic(self):
+        t1 = "This is definitely a sentence."
+        p = Preprocessor({"t": set(["This"])})
+        c, d = p.classify(t1)
+        self.assertEqual(c, "schedules")
+        self.assertEqual(d, tuple(["t"]))
+        # TODO: more intense testing of classification with schedules
+
+    def test_both(self):
+        t1 = "This is definitely a sentence."
+        p = Preprocessor({})
+        d = p.handleInput(t1)
+
+        self.assertEqual(d["strQuery"], t1)
+        self.assertEqual(d["tokQuery"], ["This", "is", "definitely", "a", "sentence", "."])
+        self.assertEqual(d["classification"], "wikipedia")
+        self.assertEqual(d["cats"], tuple([]))
+        self.assertEqual(d["meta"].iloc[0]["token"], "This")

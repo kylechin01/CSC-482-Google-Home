@@ -1,13 +1,36 @@
 # Handles preprocessing of input and classifies it into a type of question (schedules, wikipedia, or youtube)
 
 import pandas as pd
-import nltk
 import spacy
+import re
 
 class Preprocessor:
 
-    def __init__(self):
+    def __init__(self, schWords):
+        """
+        Handles preprocessing and classification. schWords should be a dictionary with each class
+        corresponding to a set of relevant words or regular expression search strings.
+        For example:
+            {
+                "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
+                "time": {"spring", "winter", "fall", "next", "last"},
+                "department": {"CSC", "college of engineering", "computer science"},
+                "course": {"natural language processing", r"[0-9][0-9][0-9]"}
+            }
+        When a string is processed, the resultant dictionary will include which of these categories
+        were found if it is classified as schedules, or an empty string for wikipedia.
+        """
         self.nlp = spacy.load("en_core_web_sm")
+        self.schWords = schWords
+        # TODO: include the schedules word lists here
+
+    def handleInput(self, input):
+        d = self.preprocess(input)
+        clasification, categories = self.classify(input)
+        d["classification"] = clasification
+        d["cats"] = categories
+
+        return d
 
     def preprocess(self, input):
         """
@@ -52,13 +75,20 @@ class Preprocessor:
             i += 1
         return df
     
-def classify(query):
-    """
-    Given a preprocessed query, return its classification
-    Classifications include:
-        "schedules" : can be answered from information on the cal poly schedules page
-        "wikipedia" : answer will be from cal poly wikipedia
-        "youtube"   : answer requires a lookup through the youtube api
-    """
-    # TODO
-    return ""
+    def classify(self, query):
+        """
+        Given a query, return its classification
+        Classifications include:
+            "schedules" : can be answered from information on the cal poly schedules page
+            "wikipedia" : answer will be from cal poly wikipedia
+            "youtube"   : answer requires a lookup through the youtube api # TODO: ask foaad if we should keep this cal poly related, or allow any songs to be played
+        Returns a tuple of a string and a list of discovered categories for schedules
+        """
+        # TODO
+        discovered = []
+        for cat in self.schWords:
+            for pat in self.schWords[cat]:
+                if re.search(pat, query):
+                    discovered.append(cat)
+                    break
+        return (("schedules" if len(discovered) > 0 else "wikipedia"), tuple(discovered),)
