@@ -49,7 +49,25 @@ class ClassificationTest(unittest.TestCase):
         c, d = p.classify(t1)
         self.assertEqual(c, "schedules")
         self.assertEqual(d, tuple(["t"]))
-        # TODO: more intense testing of classification with schedules
+    
+    def test_classification_schedules(self):
+        schd = {
+            "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
+            "time": {"spring", "winter", "fall", "next", "last"},
+            "department": {"CSC", "college of engineering", "computer science"},
+            "course": {"natural language processing", r"[0-9][0-9][0-9]"}
+        }
+        p = Preprocessor(schd)
+
+        def t(q, expected):
+            d = p.preprocessAndClassifyQuery(q)
+            self.assertEqual(d["classification"], expected)
+        
+        s = "schedules"
+        w = "wikipedia"
+        t("What quarter does Foaad teach CSC-482?", s)
+        t("Who's the president of cal poly?", w)
+        # TODO: more intense testing
 
     def test_both(self):
         t1 = "This is definitely a sentence."
