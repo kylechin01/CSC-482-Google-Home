@@ -50,10 +50,7 @@ def webscrapeWikipedia():
     pickle.dump(df, file)
     file.close()
 
-
-def getResponse(question):
-    THRESHOLD = 0.03
-
+def getDF():
     # Get df from file
     filename = "wikiCPSents"
     file = open(filename,'rb')
@@ -66,6 +63,11 @@ def getResponse(question):
     vec = TfidfVectorizer(norm=None, max_df=0.2)
     vec.fit(sents)
     tf_idf_sparse_sents = vec.transform(sents)
+
+    return (df, vec, tf_idf_sparse_sents)
+
+def getResponse(df, vec, tf_idf_sparse_sents, question):
+    THRESHOLD = 0.03
 
     ques = pd.Series([question])
     tf_idf_sparse_ques = vec.transform(ques)
@@ -86,13 +88,13 @@ def getResponse(question):
     ans = sub_df.iloc[0]['tokenized_sents']
 
     # Printing for development purposes...
-    print(most_similar.head(5))
-    print()
-    print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
-    print()
-    print(ans)
-    print(sim_value)
-    print()
+    # print(most_similar.head(5))
+    # print()
+    # print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
+    # print()
+    # print(ans)
+    # print(sim_value)
+    # print()
 
     # Check if cosine similarity is below the threshold
     if sim_value < THRESHOLD:
