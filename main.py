@@ -13,7 +13,12 @@ def main():
 
     # Get DF and related info for schedules
     schDf = []
-    schDict = {} # classifications and associated word lists
+    schDict = {
+            "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
+            "time": {"spring", "winter", "fall", "summer", "next", "last"},
+            "department": {"CSC", "college of engineering", "computer science"},
+            "course": {"natural language processing", r"[0-9][0-9][0-9]"}
+        } # classifications and associated word lists
 
     # initialize objects and variables
     p = Preprocessor(schDict)

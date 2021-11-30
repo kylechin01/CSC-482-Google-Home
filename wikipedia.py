@@ -78,6 +78,7 @@ def getResponse(df, vec, tf_idf_sparse_sents, question):
     dot = a.multiply(B).sum(axis=1)
     a_len = np.sqrt(a.multiply(a).sum())
     b_len = np.sqrt(B.multiply(B).sum(axis=1))
+    # print(a_len * b_len)
     cosSimilarity = dot / (a_len * b_len)
     cos_similarities = pd.DataFrame(cosSimilarity)[0]
     most_similar = cos_similarities.sort_values(ascending=False)

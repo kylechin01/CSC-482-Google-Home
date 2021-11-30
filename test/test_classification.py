@@ -53,7 +53,7 @@ class ClassificationTest(unittest.TestCase):
     def test_classification_schedules(self):
         schd = {
             "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
-            "time": {"spring", "winter", "fall", "next", "last"},
+            "time": {"spring", "winter", "fall", "summer", "next", "last"},
             "department": {"CSC", "college of engineering", "computer science"},
             "course": {"natural language processing", r"[0-9][0-9][0-9]"}
         }
