@@ -24,7 +24,7 @@ class Preprocessor:
         self.schWords = schWords
         # TODO: include the schedules word lists here
 
-    def handleInput(self, input):
+    def preprocessAndClassifyQuery(self, input):
         d = self.preprocess(input)
         clasification, categories = self.classify(input)
         d["classification"] = clasification

@@ -54,7 +54,7 @@ class ClassificationTest(unittest.TestCase):
     def test_both(self):
         t1 = "This is definitely a sentence."
         p = Preprocessor({})
-        d = p.handleInput(t1)
+        d = p.preprocessAndClassifyQuery(t1)
 
         self.assertEqual(d["strQuery"], t1)
         self.assertEqual(d["tokQuery"], ["This", "is", "definitely", "a", "sentence", "."])
