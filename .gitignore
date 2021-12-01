@@ -1,2 +1,2 @@
-__pycache__/classification.cpython-38.pyc
-test/__pycache__/test_classification.cpython-38.pyc
+__pycache__/*
+test/__pycache__/*
