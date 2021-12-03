@@ -1,0 +1,354 @@
+Id,Term,Name,Start Date,End Date,Is Campus Closed
+0,2182 ,Winter Term Enrollments Begin,2017-10-23,,False
+0,2184 ,Spring Term Classes Officially Displayed,2018-02-06,,False
+0,2186 ,Summer Term Classes Officially Displayed,2018-04-16,,False
+0,2188 ,Fall Term Classes Officially Displayed,2018-05-11,,False
+0,2192 ,Winter Term Classes Officially Displayed,2018-10-24,,False
+0,2194 ,Spring Term Classes Officially Displayed,2019-02-07,,False
+0,2196 ,Summer Term Classes Officially Displayed,2019-04-15,,False
+0,2198 ,Fall Term Classes Officially Displayed,2019-05-06,,False
+0,2202 ,Winter Term Classes Officially Displayed,2019-10-23,,False
+0,2204 ,Spring Term Classes Officially Displayed,2020-02-06,,False
+0,2206 ,Summer Term Classes Officially Displayed,2020-04-15,,False
+0,2208 ,Fall Term Classes Officially Displayed,2020-06-25,,False
+0,2212 ,Winter Term Classes Officially Displayed,2020-10-19,,False
+0,2214 ,Spring Term Enrollments Begin,2021-02-04,,False
+0,2216 ,Summer Term Classes Officially Displayed,2021-04-14,,False
+0,2218 ,Fall Term Classes Officially Displayed,2021-05-04,,False
+0,2222 ,Winter Term Classes Officially Displayed,2021-10-19,,False
+0,2224 ,Spring Term Classes Officially Displayed,2022-02-04,,False
+0,2226 ,Summer Term Classes Officially Displayed,2022-04-13,,False
+1,2182 ,Winter Term Classes Officially Displayed,2017-10-23,,False
+1,2184 ,Spring Term Enrollments Begin,2018-02-20,,False
+1,2186 ,Summer Term Enrollments Begin,2018-04-24,,False
+1,2188 ,Fall Term Enrollments Begin,2018-05-18,,False
+1,2192 ,Winter Term Enrollments Begin,2018-10-25,,False
+1,2194 ,Spring Term Enrollments Begin,2019-02-08,,False
+1,2196 ,Summer Term Enrollments Begin,2019-04-24,,False
+1,2198 ,Fall Term Enrollments Begin,2019-05-17,,False
+1,2202 ,Winter Term Enrollments Begin,2019-10-23,,False
+1,2204 ,Spring Term Enrollments Begin,2020-02-20,,False
+1,2206 ,Summer Term Enrollments Begin,2020-04-24,,False
+1,2208 ,Fall Term Enrollments Begin,2020-06-29,,False
+1,2212 ,Winter Term Enrollments Begin,2020-10-19,,False
+1,2214 ,Spring Term Classes Officially Displayed,2021-02-04,,False
+1,2216 ,Summer Term Enrollments Begin,2021-04-26,,False
+1,2218 ,Fall Term Enrollments Begin,2021-05-18,,False
+1,2222 ,Winter Term Enrollments Begin,2021-10-19,,False
+1,2224 ,Spring Term Enrollments Begin,2022-02-16,,False
+1,2226 ,Summer Term Enrollments Begin,2022-04-25,,False
+2,2182 ,Winter Term Open Enrollments Begin,2017-12-12,,False
+2,2184 ,Spring Term Open Enrollments Begin,2018-03-15,,False
+2,2186 ,Summer Term Open Enrollments Begin,2018-05-01,,False
+2,2188 ,Fall Term Open Enrollments Begin,2018-08-25,,False
+2,2192 ,Winter Term Open Enrollments Begin,2018-12-08,,False
+2,2194 ,Spring Term Open Enrollments Begin,2019-03-16,,False
+2,2196 ,Summer Term Open Enrollments Begin,2019-05-01,,False
+2,2198 ,Fall Term Open Enrollments Begin,2019-08-24,,False
+2,2202 ,Winter Term Open Enrollments Begin,2019-12-07,,False
+2,2204 ,Spring Term Open Enrollments Begin,2020-03-14,,False
+2,2206 ,Summer Term Open Enrollments Begin,2020-05-01,,False
+2,2208 ,Fall Conference,2020-09-04,2020-09-11,False
+2,2212 ,Winter Term Open Enrollments Begin,2020-11-30,,False
+2,2214 ,Spring Term Open Enrollments Begin,2021-03-13,,False
+2,2216 ,Summer Term Open Enrollments Begin,2021-05-01,,False
+2,2218 ,Fall Term Open Enrollments Begin,2021-08-28,,False
+2,2222 ,Winter Term Open Enrollments Begin,2021-12-04,,False
+2,2224 ,Spring Term Open Enrollments Begin,2022-03-12,,False
+2,2226 ,Summer Term Open Enrollments Begin,2022-04-30,,False
+3,2182 ,Winter Term Waitlists Purged,2018-01-04,,False
+3,2184 ,Spring Term Waitlists Purged,2018-03-29,,False
+3,2186 ,Summer Term Waitlists Purged,2018-06-21,,False
+3,2188 ,Fall Conference,2018-09-13,2018-09-19,False
+3,2192 ,Winter Term Classes Begin,2019-01-07,,False
+3,2194 ,Spring Term Classes Begin,2019-04-02,,False
+3,2196 ,Summer Term Waitlists Purged,2019-06-22,,False
+3,2198 ,Fall Conference,2019-09-12,2019-09-18,False
+3,2202 ,Winter Term Classes Begin,2020-01-06,,False
+3,2204 ,Chavez Birthday,2020-03-31,,True
+3,2206 ,Summer Term Waitlists Purged,2020-06-20,,False
+3,2208 ,Labor Day,2020-09-07,,True
+3,2212 ,Winter Term Classes Begin,2021-01-04,,False
+3,2214 ,Spring Term Classes Begin,2021-03-29,,False
+3,2216 ,Summer Term Waitlists Purged,2021-06-19,,False
+3,2218 ,Fall Term Classes Begin,2021-09-20,,False
+3,2222 ,Winter Term Classes Begin,2022-01-03,,False
+3,2224 ,Spring Term Classes Begin,2022-03-28,,False
+3,2226 ,Summer Term Waitlists Purged,2022-06-18,,False
+4,2182 ,Winter Term Classes Begin,2018-01-08,,False
+4,2184 ,Spring Term Classes Begin,2018-04-02,,False
+4,2186 ,Summer Term Classes Begin,2018-06-25,,False
+4,2188 ,Fall Term Classes Begin,2018-09-20,,False
+4,2192 ,Winter Term Waitlists Purged,2019-01-11,,False
+4,2194 ,Spring Term Waitlists Purged,2019-04-06,,False
+4,2196 ,Summer Term Classes Begin,2019-06-24,,False
+4,2198 ,Fall Term Classes Begin,2019-09-19,,False
+4,2202 ,Winter Term Waitlists Purged,2020-01-10,,False
+4,2204 ,Spring Term Classes Begin,2020-04-06,,False
+4,2206 ,Summer Term Classes Begin,2020-06-22,,False
+4,2208 ,Fall Term Open Enrollments Begin,2020-09-12,,False
+4,2212 ,Winter Term Waitlists Purged,2021-01-08,,False
+4,2214 ,Chavez Birthday,2021-03-31,,True
+4,2216 ,Summer Term Classes Begin,2021-06-21,,False
+4,2218 ,Fall Term Waitlists Purged,2021-09-24,,False
+4,2222 ,Winter Term Waitlists Purged,2022-01-07,,False
+4,2224 ,Chavez Birthday,2022-03-31,,True
+4,2226 ,Summer Term Classes Begin,2022-06-20,,False
+5,2182 ,King Birthday,2018-01-15,,True
+5,2184 ,Spring Term Add/Drop Enrollments End,2018-04-11,,False
+5,2186 ,Independence Day,2018-07-04,,True
+5,2188 ,Fall Term Waitlists Purged,2018-09-26,,False
+5,2192 ,Winter Term Withdrawl Without Penalty Ends,2019-01-16,,False
+5,2194 ,Spring Term Withdrawl Without Penalty Ends,2019-04-11,,False
+5,2196 ,Summer Term Add/Drop Enrollments End,2019-07-03,,False
+5,2198 ,Fall Term Waitlists Purged,2019-09-25,,False
+5,2202 ,Winter Term Withdrawl Without Penalty Ends,2020-01-15,,False
+5,2204 ,Spring Term Waitlists Purged,2020-04-10,,False
+5,2206 ,Summer Term Add/Drop Enrollments End,2020-07-01,,False
+5,2208 ,Fall Term Classes Begin,2020-09-14,,False
+5,2212 ,Winter Term Withdrawl Without Penalty Ends,2021-01-13,,False
+5,2214 ,Spring Term Waitlists Purged,2021-04-03,,False
+5,2216 ,Summer Term Add/Drop Enrollments End,2021-06-30,,False
+5,2218 ,Fall Term Withdrawl Without Penalty Ends,2021-09-29,,False
+5,2222 ,Winter Term Withdrawl Without Penalty Ends,2022-01-12,,False
+5,2224 ,Spring Term Waitlists Purged,2022-04-02,,False
+5,2226 ,Summer Term Withdrawl Without Penalty Ends,2022-06-29,,False
+6,2182 ,Winter Term Withdrawl Without Penalty Ends,2018-01-18,,False
+6,2184 ,Spring Term Withdrawl Without Penalty Ends,2018-04-11,,False
+6,2186 ,Summer Term Add/Drop Enrollments End,2018-07-05,,False
+6,2188 ,Fall Term Add/Drop Enrollments End,2018-10-01,,False
+6,2192 ,Winter Term Add/Drop Enrollments End,2019-01-16,,False
+6,2194 ,Spring Term Add/Drop Enrollments End,2019-04-11,,False
+6,2196 ,Summer Term Withdrawl Without Penalty Ends,2019-07-03,,False
+6,2198 ,Fall Term Add/Drop Enrollments End,2019-09-30,,False
+6,2202 ,Winter Term Add/Drop Enrollments End,2020-01-15,,False
+6,2204 ,Spring Term Add/Drop Enrollments End,2020-04-15,,False
+6,2206 ,Summer Term Withdrawl Without Penalty Ends,2020-07-01,,False
+6,2208 ,Fall Term Waitlists Purged,2020-09-18,,False
+6,2212 ,Winter Term Add/Drop Enrollments End,2021-01-13,,False
+6,2214 ,Spring Term Add/Drop Enrollments End,2021-04-08,,False
+6,2216 ,Summer Term Withdrawl Without Penalty Ends,2021-06-30,,False
+6,2218 ,Fall Term Add/Drop Enrollments End,2021-09-29,,False
+6,2222 ,Winter Term Add/Drop Enrollments End,2022-01-12,,False
+6,2224 ,Spring Term Add/Drop Enrollments End,2022-04-07,,False
+6,2226 ,Summer Term Add/Drop Enrollments End,2022-06-29,,False
+7,2182 ,Winter Term Add/Drop Enrollments End,2018-01-18,,False
+7,2184 ,Spring Term Census,2018-04-20,,False
+7,2186 ,Summer Term Withdrawl Without Penalty Ends,2018-07-05,,False
+7,2188 ,Fall Term Withdrawl Without Penalty Ends,2018-10-01,,False
+7,2192 ,King Birthday Observed,2019-01-21,,True
+7,2194 ,Spring Term Census,2019-04-22,,False
+7,2196 ,Independence Day,2019-07-04,,True
+7,2198 ,Fall Term Withdrawl Without Penalty Ends,2019-09-30,,False
+7,2202 ,King Birthday Observed,2020-01-20,,True
+7,2204 ,Spring Term Withdrawl Without Penalty Ends,2020-04-15,,False
+7,2206 ,Independence Day Observed,2020-07-03,,True
+7,2208 ,Fall Term Add/Drop Enrollments End,2020-09-23,,False
+7,2212 ,King Birthday Observed,2021-01-18,,True
+7,2214 ,Spring Term Withdrawl Without Penalty Ends,2021-04-08,,False
+7,2216 ,Independence Day Observed,2021-07-05,,True
+7,2218 ,Fall Term Census,2021-10-08,,False
+7,2222 ,King Birthday Observed,2022-01-17,,True
+7,2224 ,Spring Term Withdrawl Without Penalty Ends,2022-04-07,,False
+7,2226 ,Summer Term Census,2022-07-11,,False
+8,2182 ,Winter Term Census,2018-01-29,,False
+8,2184 ,Spring Term 60% Elapsed,2018-05-16,,False
+8,2186 ,Summer Term Census,2018-07-16,,False
+8,2188 ,Fall Term Census,2018-10-10,,False
+8,2192 ,Winter Term Census,2019-01-28,,False
+8,2194 ,Spring Term 60% Elapsed,2019-05-16,,False
+8,2196 ,Summer Term Census,2019-07-15,,False
+8,2198 ,Fall Term Census,2019-10-09,,False
+8,2202 ,Monday Schedule,2020-01-21,,False
+8,2204 ,Spring Term Census,2020-04-20,,False
+8,2206 ,Summer Term Census,2020-07-13,,False
+8,2208 ,Fall Term Withdrawl Without Penalty Ends,2020-09-23,,False
+8,2212 ,Monday Schedule,2021-01-19,,False
+8,2214 ,Spring Term Census,2021-04-19,,False
+8,2216 ,Summer Term Census,2021-07-12,,False
+8,2218 ,Fall Term 60% Elapsed,2021-11-03,,False
+8,2222 ,Monday Schedule,2022-01-18,,False
+8,2224 ,Spring Term Census,2022-04-18,,False
+8,2226 ,Summer Term 60% Elapsed,2022-08-04,,False
+9,2182 ,Washington Birthday Observed,2018-02-19,,True
+9,2184 ,Memorial Day,2018-05-28,,True
+9,2186 ,Summer Term 60% Elapsed,2018-08-08,,False
+9,2188 ,Fall Term 60% Elapsed,2018-11-06,,False
+9,2192 ,Washington Birthday Observed,2019-02-18,,True
+9,2194 ,Memorial Day,2019-05-27,,True
+9,2196 ,Summer Term 60% Elapsed,2019-08-07,,False
+9,2198 ,Fall Term 60% Elapsed,2019-11-05,,False
+9,2202 ,Winter Term Census,2020-01-27,,False
+9,2204 ,Spring Term 60% Elapsed,2020-05-16,,False
+9,2206 ,Summer Term 60% Elapsed,2020-08-05,,False
+9,2208 ,Fall Term Census,2020-10-02,,False
+9,2212 ,Winter Term Census,2021-01-25,,False
+9,2214 ,Spring Term 60% Elapsed,2021-05-12,,False
+9,2216 ,Summer Term 60% Elapsed,2021-08-04,,False
+9,2218 ,Veterans Day,2021-11-11,,True
+9,2222 ,Winter Term Census,2022-01-24,,False
+9,2224 ,Spring Term 60% Elapsed,2022-05-11,,False
+9,2226 ,Summer Term Classes End,2022-08-26,,False
+10,2182 ,Monday Schedule,2018-02-20,,False
+10,2184 ,Spring Term Classes End,2018-06-08,,False
+10,2186 ,Summer Term Classes End,2018-08-31,,False
+10,2188 ,Veterans Day Observed,2018-11-12,,True
+10,2192 ,Monday Schedule,2019-02-19,,False
+10,2194 ,Monday Schedule,2019-05-28,,False
+10,2196 ,Summer Term Classes End,2019-08-30,,False
+10,2198 ,Veterans Day,2019-11-11,,True
+10,2202 ,Washington Birthday Observed,2020-02-17,,True
+10,2204 ,Memorial Day,2020-05-25,,True
+10,2206 ,Summer Term Classes End,2020-08-28,,False
+10,2208 ,Fall Term 60% Elapsed,2020-10-28,,False
+10,2212 ,Washington Birthday Observed,2021-02-15,,True
+10,2214 ,Memorial Day,2021-05-31,,True
+10,2216 ,Summer Term Classes End,2021-08-27,,False
+10,2218 ,Academic Holiday,2021-11-22,2021-11-28,True
+10,2222 ,Winter Term 60% Elapsed,2022-02-16,,False
+10,2224 ,Memorial Day,2022-05-30,,True
+10,2226 ,Labor Day,2022-09-05,,True
+11,2182 ,Winter Term 60% Elapsed,2018-02-21,,False
+11,2184 ,Final Exams Common Option,2018-06-09,,False
+11,2186 ,Labor Day,2018-09-03,,True
+11,2188 ,Academic Holiday,2018-11-19,2018-11-25,True
+11,2192 ,Winter Term 60% Elapsed,2019-02-20,,False
+11,2194 ,Spring Term Classes End,2019-06-07,,False
+11,2196 ,Labor Day,2019-09-02,,True
+11,2198 ,Academic Holiday,2019-11-25,2019-12-01,True
+11,2202 ,Winter Term 60% Elapsed,2020-02-19,,False
+11,2204 ,Spring Term Classes End,2020-06-05,,False
+11,2206 ,Academic Holiday,2020-08-29,2020-09-03,True
+11,2208 ,Veterans Day,2020-11-11,,True
+11,2212 ,Winter Term 60% Elapsed,2021-02-17,,False
+11,2214 ,Spring Term Classes End,2021-06-04,,False
+11,2216 ,Final Exams 10-Week Session,2021-08-30,2021-09-03,False
+11,2218 ,Thanksgiving,2021-11-25,,True
+11,2222 ,Washington Birthday Observed,2022-02-21,,True
+11,2224 ,Spring Term Classes End,2022-06-03,,False
+11,2226 ,Summer Term Grades Committed,2022-09-09,,False
+12,2182 ,Winter Term Classes End,2018-03-16,,False
+12,2184 ,Final Exams,2018-06-11,2018-06-15,False
+12,2186 ,Final Exams 10-Week Session,2018-09-04,2018-09-06,False
+12,2188 ,Thanksgiving,2018-11-22,,True
+12,2192 ,Winter Term Classes End,2019-03-15,,False
+12,2194 ,Final Exams Common Option,2019-06-08,,False
+12,2196 ,Final Exams 10-Week Session,2019-09-03,2019-09-05,False
+12,2198 ,Thanksgiving,2019-11-28,,True
+12,2202 ,Winter Term Classes End,2020-03-13,,False
+12,2204 ,Final Exams Common Option,2020-06-06,,False
+12,2206 ,Final Exams 10-Week Session,2020-08-31,2020-09-04,False
+12,2208 ,Virtual Classes Only,2020-11-23,2020-11-24,False
+12,2212 ,Winter Term Classes End,2021-03-12,,False
+12,2214 ,Final Exams Common Option,2021-06-05,,False
+12,2216 ,Academic Holiday,2021-09-04,2021-09-12,True
+12,2218 ,Lincoln Birthday Observed,2021-11-26,,True
+12,2222 ,Winter Term Classes End,2022-03-11,,False
+12,2224 ,Final Exams Common Option,2022-06-04,,False
+13,2182 ,Final Exams Common Option,2018-03-17,,False
+13,2184 ,Commencement,2018-06-16,2018-06-17,False
+13,2186 ,Academic Holiday,2018-09-07,2018-09-12,True
+13,2188 ,Lincoln Birthday Observed,2018-11-23,,True
+13,2192 ,Final Exams Common Option,2019-03-16,,False
+13,2194 ,Final Exams,2019-06-10,2019-06-14,False
+13,2196 ,Academic Holiday,2019-09-06,2019-09-11,True
+13,2198 ,Lincoln Birthday Observed,2019-11-29,,True
+13,2202 ,Final Exams Common Option,2020-03-14,,False
+13,2204 ,Final Exams,2020-06-08,2020-06-12,False
+13,2206 ,Summer Term Grades Committed,2020-09-04,,False
+13,2208 ,Fall Term Classes End,2020-11-24,,False
+13,2212 ,Final Exams Common Option,2021-03-13,,False
+13,2214 ,Final Exams,2021-06-07,2021-06-11,False
+13,2216 ,Labor Day,2021-09-06,,True
+13,2218 ,Fall Term Classes End,2021-12-03,,False
+13,2222 ,Final Exams Common Option,2022-03-12,,False
+13,2224 ,Final Exams,2022-06-06,2022-06-10,False
+14,2182 ,Final Exams,2018-03-19,2018-03-23,False
+14,2184 ,Academic Holiday,2018-06-18,2018-06-24,True
+14,2186 ,Summer Term Grades Committed,2018-09-14,,False
+14,2188 ,Fall Term Classes End,2018-12-07,,False
+14,2192 ,Final Exams,2019-03-18,2019-03-22,False
+14,2194 ,Commencement,2019-06-15,2019-06-16,False
+14,2196 ,Summer Term Grades Committed,2019-09-13,,False
+14,2198 ,Fall Term Classes End,2019-12-06,,False
+14,2202 ,Final Exams,2020-03-16,2020-03-20,False
+14,2204 ,Commencement,2020-06-13,2020-06-14,False
+14,2208 ,Academic Holiday,2020-11-25,2020-11-29,True
+14,2212 ,Final Exams,2021-03-15,2021-03-19,False
+14,2214 ,Commencement,2021-06-12,2021-06-13,False
+14,2216 ,Summer Term Grades Committed,2021-09-10,,False
+14,2218 ,Final Exams Common Option,2021-12-04,,False
+14,2222 ,Final Exams,2022-03-14,2022-03-18,False
+14,2224 ,Commencement,2022-06-11,2022-06-12,False
+15,2182 ,Academic Holiday,2018-03-24,2018-04-01,True
+15,2184 ,Spring Term Grades Committed,2018-06-22,,False
+15,2188 ,Final Exams Common Option,2018-12-08,,False
+15,2192 ,Evaluation Day,2019-03-25,,False
+15,2194 ,Academic Holiday,2019-06-17,2019-06-23,True
+15,2198 ,Final Exams Common Option,2019-12-07,,False
+15,2202 ,Evaluation Day,2020-03-23,,False
+15,2204 ,Academic Holiday,2020-06-15,2020-06-21,True
+15,2208 ,Thanksgiving,2020-11-26,,True
+15,2212 ,Evaluation Day,2021-03-22,,False
+15,2214 ,Academic Holiday,2021-06-14,2021-06-20,True
+15,2218 ,Final Exams,2021-12-06,2021-12-10,False
+15,2222 ,Evaluation Day,2022-03-21,,False
+15,2224 ,Spring Term Grades Committed,2022-06-17,,False
+16,2182 ,Evaluation Day,2018-03-25,,False
+16,2188 ,Final Exams,2018-12-10,2018-12-14,False
+16,2192 ,Academic Holiday,2019-03-26,2019-04-01,True
+16,2194 ,Spring Term Grades Committed,2019-06-21,,False
+16,2198 ,Final Exams,2019-12-09,2019-12-13,False
+16,2202 ,Academic Holiday,2020-03-24,2020-03-29,True
+16,2204 ,Spring Term Grades Committed,2020-06-19,,False
+16,2208 ,Lincoln Birthday Observed,2020-11-27,,True
+16,2212 ,Academic Holiday,2021-03-23,2021-03-28,True
+16,2214 ,Spring Term Grades Committed,2021-06-18,,False
+16,2218 ,Commencement,2021-12-11,,False
+16,2222 ,Academic Holiday,2022-03-22,2022-03-27,True
+17,2182 ,Chavez Birthday Observed,2018-03-30,,True
+17,2188 ,Commencement,2018-12-15,,False
+17,2192 ,Winter Term Grades Committed,2019-03-29,,False
+17,2198 ,Commencement,2019-12-14,,False
+17,2202 ,Winter Term Grades Committed,2020-03-27,,False
+17,2208 ,Final Exams,2020-11-30,2020-12-04,False
+17,2212 ,Winter Term Grades Committed,2021-03-26,,False
+17,2218 ,Evaluation Day,2021-12-13,,False
+17,2222 ,Winter Term Grades Committed,2022-03-25,,False
+18,2182 ,Winter Term Grades Committed,2018-04-02,,False
+18,2188 ,Academic Holiday,2018-12-16,2019-01-06,True
+18,2192 ,Chavez Birthday Observed,2019-04-01,,True
+18,2198 ,Academic Holiday,2019-12-15,2020-01-05,True
+18,2208 ,Commencement,2020-12-05,,False
+18,2218 ,Academic Holiday,2021-12-15,2022-01-02,True
+19,2188 ,Fall Term Grades Committed,2018-12-21,,False
+19,2198 ,Fall Term Grades Committed,2019-12-20,,False
+19,2208 ,Final Exams Common Option,2020-12-05,,False
+19,2218 ,Fall Term Grades Committed,2021-12-17,,False
+20,2188 ,On-Pay Status Holiday GI/PI,2018-12-24,,True
+20,2198 ,Washington Birthday Observed,2019-12-23,,True
+20,2208 ,Academic Holiday,2020-12-06,2021-01-03,True
+20,2218 ,Christmas Observed,2021-12-24,,True
+21,2188 ,Christmas,2018-12-25,,True
+21,2198 ,California Adm Day Observed,2019-12-24,,True
+21,2208 ,Fall Term Grades Committed,2020-12-11,,False
+21,2218 ,Washington Birthday Observed,2021-12-27,,True
+22,2188 ,Washington Birthday Observed,2018-12-26,,True
+22,2198 ,Christmas,2019-12-25,,True
+22,2208 ,Christmas,2020-12-25,,True
+22,2218 ,California Adm Day Observed,2021-12-28,,True
+23,2188 ,California Adm Day Observed,2018-12-27,,True
+23,2198 ,Columbus Day Observed,2019-12-26,,True
+23,2208 ,Washington Birthday Observed,2020-12-28,,True
+23,2218 ,Indigenous Ppls Day Observed,2021-12-29,,True
+24,2188 ,Columbus Day Observed,2018-12-28,,True
+24,2198 ,On-Pay Status Holiday GI/PI,2019-12-27,,True
+24,2208 ,California Adm Day Observed,2020-12-29,,True
+24,2218 ,On-Pay Status Holiday GI/PI,2021-12-30,,True
+25,2188 ,On-Pay Status Holiday CTO/PH/V,2018-12-31,,True
+25,2198 ,New Year's Day,2020-01-01,,True
+25,2208 ,Indigenous Ppls Day Observed,2020-12-30,,True
+25,2218 ,New Year's Day Observed,2021-12-31,,True
+26,2188 ,New Year's Day,2019-01-01,,True
+26,2208 ,On-Pay Status Holiday GI/PI,2020-12-31,,True
+27,2208 ,New Year's Day,2021-01-01,,True
