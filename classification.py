@@ -40,6 +40,7 @@ class Preprocessor:
             - tokQuery: tokenized query by word in a 1D tuple
             - meta: a pandas dataframe with the attributes described in Preprocessor.getMeta()
         """
+        # TODO: first run query = fixQuery(query) to solve "ford mood" and similar issues
         # tokenize the string and get metadata for each token
         doc = self.nlp(input)
         metadf = self.getMeta(doc)

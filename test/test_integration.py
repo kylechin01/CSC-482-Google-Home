@@ -29,6 +29,14 @@ class IntegrationTest(unittest.TestCase):
         
         thq("Who is the president of cal poly?", ["Armstrong"])
         thq("What is the average gpa of cal poly students?", ["gpa"])
+        # thq("What is the cal poly orientation like?", ["orientation"])
+        # thq("Does cal poly offer tutoring services?", ["services"])
+        # thq("Does cal poly offer financial aid?", ["aid"])
+        # thq("How much does it cost to go to cal poly?", [""]) # Not performing well
+        # thq("What is the ratio of students to professors?", [""]) # Not performing well
+        # thq("What is the student faculty ratio?", [""]) # Not performing well
+
+
         #thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp
         # TODO
 
