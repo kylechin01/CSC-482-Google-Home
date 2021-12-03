@@ -6,7 +6,53 @@ from aiy.board import Board, Led
 from aiy.cloudspeech import CloudSpeechClient
 import aiy.voice.tts
 import json
+from mainHelpers import initMain, handleQuery
 
+def main():
+    logging.basicConfig(level=logging.DEBUG)
+
+    parser = argparse.ArgumentParser(description='Assistant service example.')
+    parser.add_argument('--language', default=locale_language())
+    args = parser.parse_args()
+
+    logging.info('Initializing for language %s...', args.language)
+    hints = get_hints(args.language)
+    client = CloudSpeechClient()
+
+    p, wikiRet, schDf = initMain()
+    with Board() as board:
+        board.led.state = Led.ON
+        while True:
+            #if hints:
+            #    logging.info('Say something, e.g. %s.' % ', '.join(hints))
+            #else:
+            logging.info('Say something.')
+            text = client.recognize(language_code=args.language,
+                                    hint_phrases=hints)
+            if text is None:
+                logging.info('You said nothing.')
+                aiy.voice.tts.say('Could you repeat that?')
+                continue
+
+            logging.info('You said: "%s"' % text)
+            text = text.lower()
+            if 'turn on the light' in text:
+                board.led.state = Led.ON
+            elif 'turn off the light' in text:
+                board.led.state = Led.OFF
+            elif 'blink the light' in text:
+                board.led.state = Led.BLINK
+            elif 'repeat after me' in text:
+                to_repeat = text.replace('repeat after me', '', 1)
+                aiy.voice.tts.say(to_repeat)
+            elif 'variation mode' in text:
+                get_variations(client, args)
+            elif 'goodbye' in text:
+                break
+            else:
+                resp = handleQuery(text, p, schDf, wikiRet)
+                aiy.voice.tts.say(resp)
+                
 
 def get_hints(language_code):
     if language_code.startswith('en_'):
@@ -44,46 +90,6 @@ def get_variations(client, args):
 
     logging.info(variations)
 
-
-def main():
-    logging.basicConfig(level=logging.DEBUG)
-
-    parser = argparse.ArgumentParser(description='Assistant service example.')
-    parser.add_argument('--language', default=locale_language())
-    args = parser.parse_args()
-
-    logging.info('Initializing for language %s...', args.language)
-    hints = get_hints(args.language)
-    client = CloudSpeechClient()
-    with Board() as board:
-        board.led.state = Led.ON
-        while True:
-            #if hints:
-            #    logging.info('Say something, e.g. %s.' % ', '.join(hints))
-            #else:
-            logging.info('Say something.')
-            text = client.recognize(language_code=args.language,
-                                    hint_phrases=hints)
-            if text is None:
-                logging.info('You said nothing.')
-                aiy.voice.tts.say('Could you repeat that?')
-                continue
-
-            logging.info('You said: "%s"' % text)
-            text = text.lower()
-            if 'turn on the light' in text:
-                board.led.state = Led.ON
-            elif 'turn off the light' in text:
-                board.led.state = Led.OFF
-            elif 'blink the light' in text:
-                board.led.state = Led.BLINK
-            elif 'repeat after me' in text:
-                to_repeat = text.replace('repeat after me', '', 1)
-                aiy.voice.tts.say(to_repeat)
-            elif 'variation mode' in text:
-                get_variations(client, args)
-            elif 'goodbye' in text:
-                break
 
 if __name__ == '__main__':
     main()

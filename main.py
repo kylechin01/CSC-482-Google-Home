@@ -1,69 +1,18 @@
-from classification import Preprocessor
-from wikipedia import webscrapeWikipedia, getResponse, getDF
-import json
-import glob
-import pandas as pd
+from wikipedia import getResponse, getDF
+from mainHelpers import initMain, getQuery, handleSchedulesQuery,\
+    answerQuery, handleQuery
 
 def main():
-    # webscraping
-    if True: # TODO: have a condition so it only webscrapes when needed
-        completeWebscrape()
-    # TODO
-
-    # Get DF and related info for wikipedia
-    wikiRet = getDF()
-
-    # Get DF and related info for schedules
-    schDf = []
-    df_files = glob.glob("data/*.csv")
-    for file in df_files:
-        schDf.append(tuple([file, pd.read_csv(file, encoding="ISO-8859-1")]))
-    with open("data/keywords.json") as json_file:
-        schDict = json.load(json_file)
-
-    # schDf = []
-    # schDict = {
-    #         "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
-    #         "time": {"spring", "winter", "fall", "summer", "next", "last"},
-    #         "department": {"CSC", "college of engineering", "computer science"},
-    #         "course": {"natural language processing", r"[0-9][0-9][0-9]"}
-    #     } # classifications and associated word lists
-
-    # initialize objects and variables
-    p = Preprocessor(schDict)
+    p, schDf, wikiRet = initMain()
 
     mainLoop(p, schDf, wikiRet)
 
 def mainLoop(p, schDf, wikiRet):
     while True:
         query = getQuery()
-        qp = p.preprocessAndClassifyQuery(query)
-        if qp["classification"] == "schedules":
-            resp = handleSchedulesQuery(qp, schDf)
-        elif qp["classification"] == "wikipedia":
-            resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp["strQuery"])
+        resp = handleQuery(query)
         answerQuery(resp)
         break # TODO: delete
-        
-def getQuery():
-    # TODO: temp, feel free to remove and change
-    return "What is the average GPA?"
-
-def handleSchedulesQuery(qp, schDf):
-    print(qp["cats"])
-    return "WIP"
-
-# def handleWikipediaQuery(qp, wikiRet):
-#     resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp["strQuery"])
-#     return resp
-
-def answerQuery(resp):
-    # TODO: temp, feel free to remove and change
-    print(resp)
-
-def completeWebscrape():
-    webscrapeWikipedia()
-    # TODO webscrape schedules
 
 if __name__ == '__main__':
     main()
