@@ -24,13 +24,13 @@ class NumpyEncoder(json.JSONEncoder):
 
 def main():
     # Load tables
-    df_classes = pd.read_csv("classes.csv", encoding="ISO-8859-1")
-    df_courses = pd.read_csv("courses.csv", encoding="ISO-8859-1")
-    df_departments = pd.read_csv("departments.csv", encoding="ISO-8859-1")
-    df_instructors = pd.read_csv("instructors.csv", encoding="ISO-8859-1")
-    df_locations = pd.read_csv("locations.csv")
-    df_dates = pd.read_csv("special_dates.csv")
-    df_terms = pd.read_csv("terms.csv")
+    df_classes = pd.read_csv("data/classes.csv", encoding="ISO-8859-1")
+    df_courses = pd.read_csv("data/courses.csv", encoding="ISO-8859-1")
+    df_departments = pd.read_csv("data/departments.csv", encoding="ISO-8859-1")
+    df_instructors = pd.read_csv("data/instructors.csv", encoding="ISO-8859-1")
+    df_locations = pd.read_csv("data/locations.csv")
+    df_dates = pd.read_csv("data/special_dates.csv")
+    df_terms = pd.read_csv("data/terms.csv")
 
     # Verify df indices
     df_classes.set_index(["Name", "Section", "Id", "Term"], verify_integrity=True)
@@ -53,7 +53,7 @@ def main():
     keywords["term_names"] = extract_unique_vals(df_terms, "Name")
 
     dumped = json.dumps(keywords, cls=NumpyEncoder)
-    f = open("keywords.json", "w")
+    f = open("data/keywords.json", "w")
     f.write(dumped)
     f.close()
 

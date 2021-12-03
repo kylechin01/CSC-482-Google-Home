@@ -505,31 +505,31 @@ def aggregate_class_tables(url):
 def main():
     print("\nBuilding class table...")
     class_tables = aggregate_class_tables("https://schedules.calpoly.edu/")   
-    f = open("classes.csv", "w")
+    f = open("data/classes.csv", "w")
     f.write(class_tables.to_csv())
     f.close()
 
     print("\nBuilding course table...")
     course_tables = aggregate_course_tables("https://schedules.calpoly.edu/")   
-    f = open("courses.csv", "w")
+    f = open("data/courses.csv", "w")
     f.write(course_tables.to_csv())
     f.close()
 
     print("\nBuilding department table...")
     department_tables = aggregate_department_tables("https://schedules.calpoly.edu/")   
-    f = open("departments.csv", "w")
+    f = open("data/departments.csv", "w")
     f.write(department_tables.to_csv())
     f.close()
 
     print("\nBuilding instructor table...")
     instructor_tables = aggregate_instructor_tables("https://schedules.calpoly.edu/")   
-    f = open("instructors.csv", "w")
+    f = open("data/instructors.csv", "w")
     f.write(instructor_tables.to_csv())
     f.close()
 
     print("\nBuilding term table...")
     term_table = aggregate_table("https://schedules.calpoly.edu/index_curr.htm", build_term_table)   
-    f = open("terms.csv", "w")
+    f = open("data/terms.csv", "w")
     f.write(term_table.to_csv())
     f.close()
 
@@ -537,7 +537,7 @@ def main():
     location_table = aggregate_table(
         "https://schedules.calpoly.edu/all_location_curr.htm", build_locations_table
     )   
-    f = open("locations.csv", "w")
+    f = open("data/locations.csv", "w")
     f.write(location_table.to_csv())
     f.close()
 
@@ -546,7 +546,7 @@ def main():
         "https://schedules.calpoly.edu/dates_curr.htm", build_special_dates_table
     )   
     date_table.reset_index()
-    f = open("special_dates.csv", "w")
+    f = open("data/special_dates.csv", "w")
     f.write(date_table.to_csv())
     f.close()
 
