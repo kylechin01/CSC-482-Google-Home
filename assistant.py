@@ -15,7 +15,7 @@ def get_hints(language_code):
                 'blink the light',
                 'goodbye',
 		'repeat after me', 'foaad khosmood', 'variation mode']
-        f = open('keywords.json')
+        f = open('./data/keywords.json')
         data = json.load(f)
         #for key in data.keys():
         #    for val in data[key]:
