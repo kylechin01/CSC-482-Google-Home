@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import pandas as pd
 import json
+import re
 
 def extract_unique_vals(df, col):
     return df[col].unique()
@@ -21,6 +22,16 @@ class NumpyEncoder(json.JSONEncoder):
         elif isinstance(obj, (np.ndarray,)):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
+
+def clean_instructor_names(instructor_names):
+    name_set = set([])
+    for name in instructor_names:
+        if type(name) == str:
+            name = re.sub(",|\.|\+", "", name)
+            toks = name.split()
+            for tok in toks:
+                name_set.add(tok)
+    return list(name_set)
 
 def main():
     # Load tables
@@ -43,12 +54,12 @@ def main():
 
     # Make keywords dict
     keywords = {}
-    keywords["course_codes"] = extract_unique_vals(df_courses, "Id")
     keywords["course_names"] = extract_unique_vals(df_courses, "Description")
     keywords["department_codes"] = extract_unique_vals(df_departments, "Code")
     keywords["department_names"] = extract_unique_vals(df_departments, "Name")
-    keywords["instructor_names"] = extract_unique_vals(df_instructors, "Name")
-    keywords["location_names"] = extract_unique_vals(df_locations, "Name")
+    keywords["instructor_names"] = clean_instructor_names(
+        extract_unique_vals(df_instructors, "Name")
+    )
     keywords["special_date_names"] = extract_unique_vals(df_dates, "Name")
     keywords["term_names"] = extract_unique_vals(df_terms, "Name")
 

@@ -235,8 +235,9 @@ def build_locations_table(soup):
             # If the table row is a divider then it has information about the
             # department. Save this information
             if attr_contains(headers[0], "class", "^divider.+"):
-                # Divider text is of the form "CODE-NAME". Get just the name.
-                building_name = headers[0].get_text().split()[1]
+                building_name = headers[0].find(
+                    "span", {"class": "locationDivDescr"}
+                ).get_text()
         else:
             cells = row.find_all("td")
             data = [cell.get_text() for cell in cells]

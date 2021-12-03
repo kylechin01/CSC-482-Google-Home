@@ -85,10 +85,17 @@ class Preprocessor:
         Returns a tuple of a string and a list of discovered categories for schedules
         """
         # TODO
-        discovered = []
+        query = " " + query.lower() + " "
+        discovered = {}
+        found_a_keyword = False
         for cat in self.schWords:
+            found_keywords = []
             for pat in self.schWords[cat]:
-                if re.search(pat, query):
-                    discovered.append(cat)
-                    break
-        return (("schedules" if len(discovered) > 0 else "wikipedia"), tuple(discovered),)
+                if type(pat) == str:
+                    stripped_pat = " " + pat.lower() + " "
+                    found_word = re.search(stripped_pat, query)
+                    if found_word:
+                        found_keywords.append(pat)
+                        found_a_keyword = True
+            discovered[cat] = found_keywords
+        return (("schedules" if found_a_keyword else "wikipedia"), discovered,)

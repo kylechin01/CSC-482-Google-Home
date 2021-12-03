@@ -29,7 +29,8 @@ class IntegrationTest(unittest.TestCase):
         
         thq("Who is the president of cal poly?", ["Armstrong"])
         thq("What is the average gpa of cal poly students?", ["gpa"])
-        thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp
+        #thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp
+        # TODO
 
 
 def handleQuery(query, p, wikiRet):

@@ -2,6 +2,7 @@
 
 import unittest
 import sys
+import json
 sys.path.append('../')
 
 from classification import *
@@ -41,22 +42,18 @@ class ClassificationTest(unittest.TestCase):
         p = Preprocessor({})
         c, d = p.classify(t1)
         self.assertEqual(c, "wikipedia")
-        self.assertEqual(d, tuple([]))
+        self.assertEqual(d, {})
 
     def test_classification_basic(self):
         t1 = "This is definitely a sentence."
         p = Preprocessor({"t": set(["This"])})
         c, d = p.classify(t1)
         self.assertEqual(c, "schedules")
-        self.assertEqual(d, tuple(["t"]))
+        self.assertEqual(d, {"t": ["This"]})
     
     def test_classification_schedules(self):
-        schd = {
-            "instructor": {"Foaad", "Khosmood", "Franz", "Kurfess"},
-            "time": {"spring", "winter", "fall", "summer", "next", "last"},
-            "department": {"CSC", "college of engineering", "computer science"},
-            "course": {"natural language processing", r"[0-9][0-9][0-9]"}
-        }
+        with open("../data/keywords.json") as json_file:
+            schd = json.load(json_file)
         p = Preprocessor(schd)
 
         def t(q, expected):
@@ -67,6 +64,8 @@ class ClassificationTest(unittest.TestCase):
         w = "wikipedia"
         t("What quarter does Foaad teach CSC-482?", s)
         t("Who's the president of cal poly?", w)
+        t("What classes is professor khosmood teaching this quarter?", s)
+        t("What CSC classes are being offered next quarter?", s)
         # TODO: more intense testing
 
     def test_both(self):
@@ -77,5 +76,5 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(d["strQuery"], t1)
         self.assertEqual(d["tokQuery"], ["This", "is", "definitely", "a", "sentence", "."])
         self.assertEqual(d["classification"], "wikipedia")
-        self.assertEqual(d["cats"], tuple([]))
+        self.assertEqual(d["cats"], {})
         self.assertEqual(d["meta"].iloc[0]["token"], "This")
