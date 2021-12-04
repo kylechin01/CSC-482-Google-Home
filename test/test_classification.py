@@ -3,12 +3,9 @@
 import unittest
 import sys
 import json
+
 sys.path.append('../')
-
 from classification import *
-
-with open("data/keywords.json") as json_file:
-    officialSchDict = json.load(json_file)
 
 class ClassificationTest(unittest.TestCase):
 
@@ -96,11 +93,3 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(d["classification"], "wikipedia")
         self.assertEqual(d["cats"], {})
         self.assertEqual(d["meta"].iloc[0]["token"], "This")
-    
-    def test_multiProfNamesKeywords(self):
-        p = Preprocessor(officialSchDict)
-
-        d, c = p.findKeyWords("Foaad Khosmood")
-        self.assertTrue(c)
-        self.assertTrue("Foaad" in d)
-        self.assertTrue("Khosmood" in d)

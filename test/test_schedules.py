@@ -40,5 +40,5 @@ class SchedulesTest(unittest.TestCase):
             for t in expectedTerms:
                 self.assertTrue(t.lower() in resp.lower())
         
-        # testOH("Where are Foaad Khosmood's office hours?", ["professor khosmood", "building 14", "room 213"])
+        testOH("Where are Foaad Khosmood's office hours?", ["professor khosmood", "building 14", "room 213"])
         testOH("Where are Amy Carter's office hours?", ["professor carter", "building 3", "room 100"])
