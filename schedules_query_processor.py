@@ -179,7 +179,8 @@ class Processor:
             df_res = df.loc[(df["Name"] == index[0]) & 
                 (df["Section"] == index[1]) &
                 (df["Term"] == self.current_term)]
-            df_results.append(df_res)
+            if not df_res.empty:
+                df_results.append(df_res)
         output = ""
         if len(df_results) == 0:
             output += "I could not find any classes that match that description."
