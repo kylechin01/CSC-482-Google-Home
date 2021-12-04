@@ -9,26 +9,7 @@ class Processor:
         self.dfs = dfs
         # A list of all the dataframe names
         self.table_names = dfs.keys()
-        # A dict that contains words used to identify what dataframe to use
-        # in order to answer the query.
-        self.df_identifiers = {key: [] for key in self.table_names}
-        self.df_identifiers["classes"] = [
-            "class",
-            "section",
-            "lecture",
-            "lab",
-            "days",
-            "start",
-            "end",
-            "teaches"
-            "professor"
-            "instructor"
-            "teacher",
-            "enroll",
-            "waitlist",
-            "drop",
-            "[A-Z][A-Z][A-Z]?[A-Z]?"
-        ]
+        self.current_term = 2218
         # for name in self.table_names:
         #     self.df_identifiers[name] = list(self.dfs[name].columns.values)
 
@@ -42,6 +23,7 @@ class Processor:
         print("Keywords from query: \n" + json.dumps(query_keywords, 
             sort_keys=True, indent=4))
 
+        """
         num_hits = {key: 0 for key in self.table_names}
         for lemma in query_lemmas:
             for df_name, df_identifier in self.df_identifiers.items():
@@ -50,14 +32,61 @@ class Processor:
                         print("Identifier hit found on \"" + lemma + "\" for " + df_name)
                         num_hits[df_name] += 1
         print(num_hits)
-        return
+        """
 
-    def determineColumnMeaning():
-        return
+        return self.determineQuestionType(query_lemmas, query_keywords)
+
+    """
+    Given the list of query lemmas, query keywords, and target lemmas, return true 
+    if at least one of the query lemmas is in the list of target lemmas. If a list
+    of target keyword catergories is supplied, then return true when at least one 
+    of the query lemmas is in the list of target lemmas and all elements of the
+    target keyword categories is in query keywords. Return false otherwise.
+    """ 
+    def filterQuestion(self, query_lemmas, keywords, target_lemmas, target_cats = []):
+        at_least_one_lemma_found = False
+        if len(target_lemmas) == 0:
+            at_least_one_lemma_found = True
+            # a tad inefficient here 
+        for q_lemma in query_lemmas:
+            if q_lemma in target_lemmas:
+                at_least_one_lemma_found = True
+        if len(target_cats) == 0:
+            return at_least_one_lemma_found
+        at_least_one_keyword_cat_missing = False
+        for target_cat in target_cats:
+            if target_cat not in keywords or len(keywords[target_cat]) == 0:
+                at_least_one_keyword_cat_missing = True
+        return at_least_one_lemma_found and not at_least_one_keyword_cat_missing
+                
+    """
+    Collapse various lemmas into a standardized version.
+    """
+    def normalizeLemmas(self, lemma):
+        lemma = lemma.lower()
+        if lemma in ["teacher", "professor", "prof", "instructor", "lecturer"]:
+            return "instructor"
+        elif lemma in ["begin"]:
+            return "start"
+        elif lemma in ["class"]:
+            return "course"
+        return lemma
+
+    """
+    Determines the intent of the query and attempts to answer said intent.
 
 
-    # Determine the kind of questions we can answer.
+    """
     def determineQuestionType(self, lemmas, keywords):
+        if self.filterQuestion(lemmas, keywords, ["when", "time"], 
+            ["department_codes", "course_numbers", "section_numbers"]):
+            """
+            The question is asking about a row in the classes table identifiable
+            by primary key (-ish, the given keywords due not constitute the entirety
+            of the class table's primary key).
+            """
+            return self.handleClassTimeQuestion(keywords)
+        """
         if "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
@@ -86,6 +115,7 @@ class Processor:
             return self.handleInstructorQuestion(keywords)
         else:
             return "I\'m sorry, I don't understand the question."
+        """
 
     """
     Returns the relevant row (or rows) of the Instructors table
@@ -94,8 +124,22 @@ class Processor:
     read all results out up to a limit of 3 rows.   
     """
     def handleOfficeQuestion(self, keywords):
-        name = keywords["instructor_names"]
-        return ""
+        # Get the row for the correct professor
+        curTerm = 2218 # TODO: don't hard code this, put it in Keywords file
+        resDf = self.dfs["instructors"]
+        resDf = resDf[resDf["Term"] == curTerm]
+        name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
+        resDf = resDf[resDf["Name"] == name]
+
+        if len(resDf) <= 0:
+            return "Sorry, I cannot find information on that instructor"
+
+        # format response return
+        res = resDf.iloc[0]
+        profName = res['Name'].split(',')[0]
+        ohLoc = [r.lstrip("0") for r in res["Office Location"].split("-")]
+        dept = res["Department"]
+        return f"Professor {profName} from department {dept} has office hours in building {ohLoc[0]} room {ohLoc[1]}"
 
     # TODO
     def handleInstructorQuestion(self, keywords):
@@ -123,6 +167,44 @@ class Processor:
     # TODO
     def handleNameOfClassQuestion(self, keywords):
         return ""
+
+    def handleClassTimeQuestion(self, keywords):
+        df = self.dfs["classes"]
+        class_names = list(map(lambda i, j : i + " " + j, 
+            keywords["department_codes"], keywords["course_numbers"]))
+        indices = list(map(lambda i, j : [i, int(j)], 
+            class_names, keywords["section_numbers"]))
+        df_results = []
+        for index in indices:
+            df_res = df.loc[(df["Name"] == index[0]) & 
+                (df["Section"] == index[1]) &
+                (df["Term"] == self.current_term)]
+            if not df_res.empty:
+                df_results.append(df_res)
+        output = ""
+        if len(df_results) == 0:
+            output += "I could not find any classes that match that description."
+        elif len(df_results) > 1:
+            output += "A total of " + str(len(df_results)) + "results were found."
+        for res in df_results:
+            output += f"{res['Name'].iloc[0]} section {res['Section'].iloc[0]} is a " + \
+                f"{res['Days'].iloc[0]} class that starts at {res['Start Time'].iloc[0]} " + \
+                f"and ends at {res['End Time'].iloc[0]}."
+        return output
+
+    def getProfessorNameFromKeywords(self, df, namesList):
+        """
+        Given a list of names in keywords list and the dataframe to search in,
+        return the actual name of the professor as expected in instructors dataframe
+        """
+        if len(namesList) <= 0:
+            return None
+        instrs = df["Name"]
+        for instr in instrs:
+            if isinstance(instr, str) and all([name in instr for name in namesList]):
+                # all values in names list are in this instructor name
+                return instr
+        return None
 
 # Query assumptions:
 #   Term is current
