@@ -1,16 +1,15 @@
 from wikipedia import getResponse, getDF
-from mainHelpers import initMain, getQuery, handleSchedulesQuery,\
-    answerQuery, handleQuery
+from mainHelpers import initMain, getQuery, answerQuery, handleQuery
 
 def main():
-    p, schDf, wikiRet = initMain()
+    p, wikiRet, schP = initMain()
 
-    mainLoop(p, schDf, wikiRet)
+    mainLoop(p, schP, wikiRet)
 
-def mainLoop(p, schDf, wikiRet):
+def mainLoop(p, schP, wikiRet):
     while True:
         query = getQuery()
-        resp = handleQuery(query)
+        resp = handleQuery(query, p, schP, wikiRet)
         answerQuery(resp)
         break # TODO: delete
 

@@ -1,20 +1,38 @@
 import pandas as pd
 import re
+import json
 
 class Processor:
     def __init__(self, dfs):
+        # The schedules dataframes, stored as a dict with the key being the
+        # dataframe name and the value being the dataframe itself
         self.dfs = dfs
+        # A list of all the dataframe names
+        self.table_names = dfs.keys()
+        # A dict that contains words used to identify what dataframe to use
+        # in order to answer the query.
+        # TODO: fix this 
+        self.df_identifiers = {}
+        for name in self.table_names:
+            self.df_identifiers[name] = list(self.dfs[name].columns.values)
 
-    def process_query(query, found_keywords):
-        return
+    # Given a query, respond with an appropriate answer.
+    def getResponse(self, qp):
+        query_lemmas = qp["meta"]["lemma"].tolist()
+        query_keywords = qp["cats"]
 
-    def access_database(table, loc_id):
-        return
+        print("Schedules query received: " + qp["strQuery"])
+        print("Lemmatized toks from query: " + str(query_lemmas))
+        print("Keywords from query: \n" + json.dumps(query_keywords, 
+            sort_keys=True, indent=4))
 
 
-class Query:
-    # A query will ask for one of the following:
-    def __init__(self, dfs):
+        num_hits = {key: 0 for key in self.table_names}
+        for lemma in query_lemmas:
+            for df_name, df_identifier in self.df_identifiers.items():
+                if lemma in df_identifier:
+                    num_hits[df_name] += 1
+        print(num_hits)
         return
 
 # Query assumptions:
