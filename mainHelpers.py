@@ -33,15 +33,6 @@ def initMain():
 
     return p, wikiRet, schedulesProcessor
 
-def getQuery():
-    # TODO: temp, feel free to remove and change
-    #return "What is the average GPA?"
-    return "What time does CSC 482 section 02 start?"
-
-def answerQuery(resp):
-    # TODO: temp, feel free to remove and change
-    print(resp)
-
 def completeWebscrape():
     webscrapeWikipedia()
     # TODO webscrape schedules

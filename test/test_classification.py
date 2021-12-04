@@ -66,6 +66,10 @@ class ClassificationTest(unittest.TestCase):
         t("Who's the president of cal poly?", w)
         t("What classes is professor khosmood teaching this quarter?", s)
         t("What CSC classes are being offered next quarter?", s)
+
+        # TODO: classifications to fix: professor names that are also words are incorrectly classifying as 
+        # schedules queries such as black, white, sky, call, etc
+        # t("Is cal poly a good school?", w)
         # TODO: more intense testing
     
     def test_findReg(self):
