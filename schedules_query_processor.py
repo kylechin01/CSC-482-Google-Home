@@ -9,26 +9,7 @@ class Processor:
         self.dfs = dfs
         # A list of all the dataframe names
         self.table_names = dfs.keys()
-        # A dict that contains words used to identify what dataframe to use
-        # in order to answer the query.
-        self.df_identifiers = {key: [] for key in self.table_names}
-        self.df_identifiers["classes"] = [
-            "class",
-            "section",
-            "lecture",
-            "lab",
-            "days",
-            "start",
-            "end",
-            "teaches"
-            "professor"
-            "instructor"
-            "teacher",
-            "enroll",
-            "waitlist",
-            "drop",
-            "[A-Z][A-Z][A-Z]?[A-Z]?"
-        ]
+        self.current_term = 2218
         # for name in self.table_names:
         #     self.df_identifiers[name] = list(self.dfs[name].columns.values)
 
@@ -52,9 +33,7 @@ class Processor:
                         num_hits[df_name] += 1
         print(num_hits)
         """
-        print(self.determineQuestionType(query_lemmas, query_keywords))
-
-        return
+        return self.determineQuestionType(query_lemmas, query_keywords)
 
     """
     Given the list of query lemmas, query keywords, and target lemmas, return true 
@@ -77,7 +56,7 @@ class Processor:
         for target_cat in target_cats:
             if target_cat not in keywords or len(keywords[target_cat]) == 0:
                 at_least_one_keyword_cat_missing = True
-        return at_least_one_lemma_found and not at_least_one_keyword
+        return at_least_one_lemma_found and not at_least_one_keyword_cat_missing
                 
     """
     Collapse various lemmas into a standardized version.
@@ -98,20 +77,14 @@ class Processor:
 
     """
     def determineQuestionType(self, lemmas, keywords):
-        if self.filterQuestion(lemmas, keywords, [], 
+        if self.filterQuestion(lemmas, keywords, ["when", "time"], 
             ["department_codes", "course_numbers", "section_numbers"]):
             """
             The question is asking about a row in the classes table identifiable
             by primary key (-ish, the given keywords due not constitute the entirety
             of the class table's primary key).
             """
-            df_to_search = self.dfs["classes"].set_index(["Name", "Section", "Term"])
-            class_names = list(map(lambda(i, j): i + " " + j, 
-                zip(keywords["department_codes"], keywords["course_numbers"])))
-            index = list(map(lambda(i, j): [i, j], 
-                zip(class_names, keywords["section_numbers"])))
-            df_res = self.queryIntoDF(self.dfs["classes"], index)
-            return df_res
+            return self.handleClassTimeQuestion(keywords)
         """
         if "office" in lemmas:
             # The query is about office hours or office location.
@@ -142,12 +115,6 @@ class Processor:
         else:
             return "I\'m sorry, I don't understand the question."
         """
-
-    def queryIntoDF(self, df, index, col = None):
-        output = []
-        for i in index:
-            output.append(df.loc[i])
-        return output
 
     """
     Returns the relevant row (or rows) of the Instructors table
@@ -185,6 +152,29 @@ class Processor:
     # TODO
     def handleNameOfClassQuestion(self, keywords):
         return ""
+
+    def handleClassTimeQuestion(self, keywords):
+        df = self.dfs["classes"]
+        class_names = list(map(lambda i, j : i + " " + j, 
+            keywords["department_codes"], keywords["course_numbers"]))
+        indices = list(map(lambda i, j : [i, int(j)], 
+            class_names, keywords["section_numbers"]))
+        df_results = []
+        for index in indices:
+            df_res = df.loc[(df["Name"] == index[0]) & 
+                (df["Section"] == index[1]) &
+                (df["Term"] == self.current_term)]
+            df_results.append(df_res)
+        output = ""
+        if len(df_results) == 0:
+            output += "I could not find any classes that match that description."
+        elif len(df_results) > 1:
+            output += "A total of " + str(len(df_results)) + "results were found."
+        for res in df_results:
+            output += f"{res['Name'].iloc[0]} section {res['Section'].iloc[0]} is a " + \
+                f"{res['Days'].iloc[0]} class that starts at {res['Start Time'].iloc[0]} " + \
+                f"and ends at {res['End Time'].iloc[0]}."
+        return output
 
 # Query assumptions:
 #   Term is current
