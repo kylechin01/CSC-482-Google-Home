@@ -57,8 +57,8 @@ def webscrapeWikipedia():
     allDF = []
     
     tablesDF[0] = tablesDF[0].rename(columns={0:"A", 1:"B"})
-    tablesDF[0]["A"] = tablesDF[0]["A"].str.replace("\[[0-9]*\]", "").str.strip()
-    tablesDF[0]["B"] = tablesDF[0]["B"].str.replace("\[[0-9]*\]", "").str.strip()
+    tablesDF[0]["A"] = tablesDF[0]["A"].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
+    tablesDF[0]["B"] = tablesDF[0]["B"].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
     tablesDF[0] = tablesDF[0].dropna()
     tablesDF[0] = tablesDF[0].loc[tablesDF[0]["A"]!="Colors"]
     allDF.append(tablesDF[0])
@@ -66,7 +66,7 @@ def webscrapeWikipedia():
     tablesDF[1] = tablesDF[1].dropna().rename(columns={tablesDF[1].columns[0]:"Category"})
     allDF.append(tablesDF[1])
 
-    tablesDF[2][tablesDF[2].columns[0]] = tablesDF[2][tablesDF[2].columns[0]].str.replace("\[[0-9]*\]", "").str.strip()
+    tablesDF[2][tablesDF[2].columns[0]] = tablesDF[2][tablesDF[2].columns[0]].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
     tablesDF[2] = tablesDF[2].loc[tablesDF[2][tablesDF[2].columns[0]]!=tablesDF[2][tablesDF[2].columns[1]]]
     allDF.append(tablesDF[2])
 
