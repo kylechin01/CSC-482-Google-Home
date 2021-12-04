@@ -57,33 +57,33 @@ class Processor:
 
 
     # Determine the kind of questions we can answer.
-    def determineQuestionType(lemmas, keywords):
+    def determineQuestionType(self, lemmas, keywords):
         if "office" in lemmas:
             # The query is about office hours or office location.
-            return handleOfficeQuestion(keywords)
-        elif if "section_number" in keywords:
-            handleClassQuestion(keywords)
+            return self.handleOfficeQuestion(keywords)
+        elif "section_number" in keywords:
+            return self.handleClassQuestion(keywords)
         elif ("name" in lemmas or "description" in lemmas) and \
             "course_number" in keywords:
-            return handleNameOfCourseQuestion(keywords)
+            return self.handleNameOfCourseQuestion(keywords)
         # TODO, google may parse GE as two words
         elif ("general" in lemmas or "GE" in lemmas) and \
             "course_number" in keywords:
-            return handleGEsOfCourseQuestion(keywords)
+            return self.handleGEsOfCourseQuestion(keywords)
         # TODO fix prereq for google parsings
         elif ("requirements" in lemmas or "prereq" in lemmas) and \
             "course_number" in keywords:
-            return handleRequirementsOfCourseQuestion(keywords)
+            return self.handleRequirementsOfCourseQuestion(keywords)
         elif ("name" in lemmas or "description" in lemmas) and \
             "course_number" in keywords:
-            return handleNameOfClassQuestion(keywords)
+            return self.handleNameOfClassQuestion(keywords)
         elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
             len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
-            return handleClassQuestion(keywords)
+            return self.handleClassQuestion(keywords)
         elif len(keywords["instructor_names"]) > 0:
             # Only professor name was given, return information about that
             # professor. 
-            return handleInstructorQuestion(keywords)
+            return self.handleInstructorQuestion(keywords)
         else:
             return "I\'m sorry, I don't understand the question."
 
@@ -93,20 +93,36 @@ class Processor:
     additionally state the number of rows that were returned and
     read all results out up to a limit of 3 rows.   
     """
-    def handleOfficeQuestion(keywords):
+    def handleOfficeQuestion(self, keywords):
         name = keywords["instructor_names"]
         return ""
 
     # TODO
-    def handleInstructorQuestion(keywords):
+    def handleInstructorQuestion(self, keywords):
         return ""
 
     # TODO
-    def handleClassQuestion(keywords):
+    def handleClassQuestion(self, keywords):
         df_classes = self.dfs["classses"]
         # res = df_classes.loc["Name" == keywords["course_numbers"]
         #     "Section" == keywords["section_numbers"]
         return None
+
+    # TODO
+    def handleNameOfCourseQuestion(self, keywords):
+        return ""
+
+    # TODO
+    def handleGEsOfCourseQuestion(self, keywords):
+        return ""
+
+    # TODO
+    def handleRequirementsOfCourseQuestion(self, keywords):
+        return ""
+
+    # TODO
+    def handleNameOfClassQuestion(self, keywords):
+        return ""
 
 # Query assumptions:
 #   Term is current

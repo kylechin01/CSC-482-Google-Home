@@ -73,12 +73,11 @@ class ClassificationTest(unittest.TestCase):
 
         c, d = p.classify("CSC 482 section 2")
         self.assertEqual(c, "schedules")
-        self.assertTrue("482" in d["courses"])
-        self.assertTrue("482" in d["classes"])
-        self.assertTrue("02" in d["classes"])
+        self.assertEqual("482", d["course_number"])
+        self.assertEqual("02", d["section_number"])
 
         c, d = p.classify("CSC 482 section 42")
-        self.assertTrue("42" in d["classes"])
+        self.assertEqual("42", d["section_number"])
 
     def test_both(self):
         t1 = "This is definitely a sentence."
