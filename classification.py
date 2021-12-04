@@ -121,13 +121,13 @@ class Preprocessor:
             if len(sect) == 1:
                 # covers cases like section 2 -> 02
                 sect = "0" + sect
-            discovered["section_number"] = sect
+            discovered["section_numbers"] = sect
         
         # search for class number like 482, put it in both classes and courses sections
         found = re.search(" (\d\d\d) ", query)
         if found:
             foundReg = True
             classNum = found[1]
-            discovered["course_number"] = classNum
+            discovered["course_numbers"] = classNum
 
         return discovered, foundReg
