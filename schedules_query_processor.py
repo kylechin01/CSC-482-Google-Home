@@ -42,6 +42,7 @@ class Processor:
         print("Keywords from query: \n" + json.dumps(query_keywords, 
             sort_keys=True, indent=4))
 
+        """
         num_hits = {key: 0 for key in self.table_names}
         for lemma in query_lemmas:
             for df_name, df_identifier in self.df_identifiers.items():
@@ -50,14 +51,68 @@ class Processor:
                         print("Identifier hit found on \"" + lemma + "\" for " + df_name)
                         num_hits[df_name] += 1
         print(num_hits)
+        """
+        print(self.determineQuestionType(query_lemmas, query_keywords))
+
         return
 
-    def determineColumnMeaning():
-        return
+    """
+    Given the list of query lemmas, query keywords, and target lemmas, return true 
+    if at least one of the query lemmas is in the list of target lemmas. If a list
+    of target keyword catergories is supplied, then return true when at least one 
+    of the query lemmas is in the list of target lemmas and all elements of the
+    target keyword categories is in query keywords. Return false otherwise.
+    """ 
+    def filterQuestion(self, query_lemmas, keywords, target_lemmas, target_cats = []):
+        at_least_one_lemma_found = False
+        if len(target_lemmas) == 0:
+            at_least_one_lemma_found = True
+            # a tad inefficient here 
+        for q_lemma in query_lemmas:
+            if q_lemma in target_lemmas:
+                at_least_one_lemma_found = True
+        if len(target_cats) == 0:
+            return at_least_one_lemma_found
+        at_least_one_keyword_cat_missing = False
+        for target_cat in target_cats:
+            if target_cat not in keywords or len(keywords[target_cat]) == 0:
+                at_least_one_keyword_cat_missing = True
+        return at_least_one_lemma_found and not at_least_one_keyword
+                
+    """
+    Collapse various lemmas into a standardized version.
+    """
+    def normalizeLemmas(self, lemma):
+        lemma = lemma.lower()
+        if lemma in ["teacher", "professor", "prof", "instructor", "lecturer"]:
+            return "instructor"
+        elif lemma in ["begin"]:
+            return "start"
+        elif lemma in ["class"]:
+            return "course"
+        return lemma
+
+    """
+    Determines the intent of the query and attempts to answer said intent.
 
 
-    # Determine the kind of questions we can answer.
+    """
     def determineQuestionType(self, lemmas, keywords):
+        if self.filterQuestion(lemmas, keywords, [], 
+            ["department_codes", "course_numbers", "section_numbers"]):
+            """
+            The question is asking about a row in the classes table identifiable
+            by primary key (-ish, the given keywords due not constitute the entirety
+            of the class table's primary key).
+            """
+            df_to_search = self.dfs["classes"].set_index(["Name", "Section", "Term"])
+            class_names = list(map(lambda(i, j): i + " " + j, 
+                zip(keywords["department_codes"], keywords["course_numbers"])))
+            index = list(map(lambda(i, j): [i, j], 
+                zip(class_names, keywords["section_numbers"])))
+            df_res = self.queryIntoDF(self.dfs["classes"], index)
+            return df_res
+        """
         if "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
@@ -86,6 +141,13 @@ class Processor:
             return self.handleInstructorQuestion(keywords)
         else:
             return "I\'m sorry, I don't understand the question."
+        """
+
+    def queryIntoDF(self, df, index, col = None):
+        output = []
+        for i in index:
+            output.append(df.loc[i])
+        return output
 
     """
     Returns the relevant row (or rows) of the Instructors table
