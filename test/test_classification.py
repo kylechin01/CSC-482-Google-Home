@@ -67,6 +67,18 @@ class ClassificationTest(unittest.TestCase):
         t("What classes is professor khosmood teaching this quarter?", s)
         t("What CSC classes are being offered next quarter?", s)
         # TODO: more intense testing
+    
+    def test_findReg(self):
+        p = Preprocessor({})
+
+        c, d = p.classify("CSC 482 section 2")
+        self.assertEqual(c, "schedules")
+        self.assertTrue("482" in d["courses"])
+        self.assertTrue("482" in d["classes"])
+        self.assertTrue("02" in d["classes"])
+
+        c, d = p.classify("CSC 482 section 42")
+        self.assertTrue("42" in d["classes"])
 
     def test_both(self):
         t1 = "This is definitely a sentence."

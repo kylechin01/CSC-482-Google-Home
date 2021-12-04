@@ -52,3 +52,4 @@ def handleQuery(query, p, schP, wikiRet):
         resp = schP.getResponse(qp)
     elif qp["classification"] == "wikipedia":
         resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp["strQuery"])
+    return resp

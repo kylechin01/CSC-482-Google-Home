@@ -5,6 +5,7 @@ import sys
 sys.path.append('../')
 
 from main import *
+from mainHelpers import *
 
 class IntegrationTest(unittest.TestCase):
     def test_integrate_wiki(self):
@@ -22,7 +23,7 @@ class IntegrationTest(unittest.TestCase):
         
         
         def thq(query, expectedTerms):
-            resp = handleQuery(query, p, wikiRet)
+            resp = handleQuery(query, p, {}, wikiRet)
             for t in expectedTerms:
                 self.assertTrue(t.lower() in resp.lower())
             print(f"Given: {query}\nReturn: {resp}\n\n")
@@ -39,15 +40,3 @@ class IntegrationTest(unittest.TestCase):
 
         #thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp
         # TODO
-
-
-def handleQuery(query, p, wikiRet):
-    """
-    Psuedo main
-    """
-    qp = p.preprocessAndClassifyQuery(query)
-    if qp["classification"] == "schedules":
-        resp = handleSchedulesQuery(qp, {})
-    elif qp["classification"] == "wikipedia":
-        resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp["strQuery"])
-    return resp
