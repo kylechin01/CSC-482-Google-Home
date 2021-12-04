@@ -33,6 +33,7 @@ class Processor:
                         num_hits[df_name] += 1
         print(num_hits)
         """
+
         return self.determineQuestionType(query_lemmas, query_keywords)
 
     """
@@ -123,8 +124,22 @@ class Processor:
     read all results out up to a limit of 3 rows.   
     """
     def handleOfficeQuestion(self, keywords):
-        name = keywords["instructor_names"]
-        return ""
+        # Get the row for the correct professor
+        curTerm = 2218 # TODO: don't hard code this, put it in Keywords file
+        resDf = self.dfs["instructors"]
+        resDf = resDf[resDf["Term"] == curTerm]
+        name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
+        resDf = resDf[resDf["Name"] == name]
+
+        if len(resDf) <= 0:
+            return "Sorry, I cannot find information on that instructor"
+
+        # format response return
+        res = resDf.iloc[0]
+        profName = res['Name'].split(',')[0]
+        ohLoc = [r.lstrip("0") for r in res["Office Location"].split("-")]
+        dept = res["Department"]
+        return f"Professor {profName} from department {dept} has office hours in building {ohLoc[0]} room {ohLoc[1]}"
 
     # TODO
     def handleInstructorQuestion(self, keywords):
@@ -175,6 +190,20 @@ class Processor:
                 f"{res['Days'].iloc[0]} class that starts at {res['Start Time'].iloc[0]} " + \
                 f"and ends at {res['End Time'].iloc[0]}."
         return output
+
+    def getProfessorNameFromKeywords(self, df, namesList):
+        """
+        Given a list of names in keywords list and the dataframe to search in,
+        return the actual name of the professor as expected in instructors dataframe
+        """
+        if len(namesList) <= 0:
+            return None
+        instrs = df["Name"]
+        for instr in instrs:
+            if isinstance(instr, str) and all([name in instr for name in namesList]):
+                # all values in names list are in this instructor name
+                return instr
+        return None
 
 # Query assumptions:
 #   Term is current

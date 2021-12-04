@@ -98,7 +98,7 @@ class Preprocessor:
             found_keywords = []
             for pat in self.schWords[cat]:
                 if type(pat) == str:
-                    stripped_pat = " " + pat.lower() + " "
+                    stripped_pat = " " + pat.lower() + "[\' ]"
                     found_word = re.search(stripped_pat, query)
                     if found_word:
                         found_keywords.append(pat)
