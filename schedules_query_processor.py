@@ -11,10 +11,26 @@ class Processor:
         self.table_names = dfs.keys()
         # A dict that contains words used to identify what dataframe to use
         # in order to answer the query.
-        # TODO: fix this 
-        self.df_identifiers = {}
-        for name in self.table_names:
-            self.df_identifiers[name] = list(self.dfs[name].columns.values)
+        self.df_identifiers = {key: [] for key in self.table_names}
+        self.df_identifiers["classes"] = [
+            "class",
+            "section",
+            "lecture",
+            "lab",
+            "days",
+            "start",
+            "end",
+            "teaches"
+            "professor"
+            "instructor"
+            "teacher",
+            "enroll",
+            "waitlist",
+            "drop",
+            "[A-Z][A-Z][A-Z]?[A-Z]?"
+        ]
+        # for name in self.table_names:
+        #     self.df_identifiers[name] = list(self.dfs[name].columns.values)
 
     # Given a query, respond with an appropriate answer.
     def getResponse(self, qp):
@@ -26,14 +42,71 @@ class Processor:
         print("Keywords from query: \n" + json.dumps(query_keywords, 
             sort_keys=True, indent=4))
 
-
         num_hits = {key: 0 for key in self.table_names}
         for lemma in query_lemmas:
             for df_name, df_identifier in self.df_identifiers.items():
-                if lemma in df_identifier:
-                    num_hits[df_name] += 1
+                for identifier in df_identifier:
+                    if re.match(identifier, lemma):
+                        print("Identifier hit found on \"" + lemma + "\" for " + df_name)
+                        num_hits[df_name] += 1
         print(num_hits)
         return
+
+    def determineColumnMeaning():
+        return
+
+
+    # Determine the kind of questions we can answer.
+    def determineQuestionType(lemmas, keywords):
+        if "office" in lemmas:
+            # The query is about office hours or office location.
+            return handleOfficeQuestion(keywords)
+        elif if "section_number" in keywords:
+            handleClassQuestion(keywords)
+        elif ("name" in lemmas or "description" in lemmas) and \
+            "course_number" in keywords:
+            return handleNameOfCourseQuestion(keywords)
+        # TODO, google may parse GE as two words
+        elif ("general" in lemmas or "GE" in lemmas) and \
+            "course_number" in keywords:
+            return handleGEsOfCourseQuestion(keywords)
+        # TODO fix prereq for google parsings
+        elif ("requirements" in lemmas or "prereq" in lemmas) and \
+            "course_number" in keywords:
+            return handleRequirementsOfCourseQuestion(keywords)
+        elif ("name" in lemmas or "description" in lemmas) and \
+            "course_number" in keywords:
+            return handleNameOfClassQuestion(keywords)
+        elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
+            len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
+            return handleClassQuestion(keywords)
+        elif len(keywords["instructor_names"]) > 0:
+            # Only professor name was given, return information about that
+            # professor. 
+            return handleInstructorQuestion(keywords)
+        else:
+            return "I\'m sorry, I don't understand the question."
+
+    """
+    Returns the relevant row (or rows) of the Instructors table
+    according to the input. If multiple rows are to be returned,
+    additionally state the number of rows that were returned and
+    read all results out up to a limit of 3 rows.   
+    """
+    def handleOfficeQuestion(keywords):
+        name = keywords["instructor_names"]
+        return ""
+
+    # TODO
+    def handleInstructorQuestion(keywords):
+        return ""
+
+    # TODO
+    def handleClassQuestion(keywords):
+        df_classes = self.dfs["classses"]
+        # res = df_classes.loc["Name" == keywords["course_numbers"]
+        #     "Section" == keywords["section_numbers"]
+        return None
 
 # Query assumptions:
 #   Term is current
@@ -55,8 +128,8 @@ class Processor:
 # How many sections of CPE 315 are taught by Seng?
 
 # === Answer is a list rows ===
-# Is Professor Seng teaching this quarter?
-# What classes is Professor Foaad teaching next quarter?i
+# Is Professor Seng teaching next quarter?
+# What classes is Professor Foaad teaching next quarter?
 # How many different professors are teaching CSC 482?
 # Which professors are teaching CSC 482 this quarter?
 # What departments are in the college of engineering?
@@ -68,4 +141,3 @@ class Processor:
 # How often is CSC 482 offered?
 # What time is CSC 101?
 # How many people are on the waitlist for CPE 123?
-

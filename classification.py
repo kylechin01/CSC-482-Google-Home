@@ -116,25 +116,18 @@ class Preprocessor:
         # search for a section number given, put it in classes category
         found = re.search(" section (\d?\d) ", query)
         if found:
-            if "classes" not in discovered:
-                discovered["classes"] = []
             foundReg = True
             sect = found[1]
             if len(sect) == 1:
                 # covers cases like section 2 -> 02
                 sect = "0" + sect
-            discovered["classes"].append(sect)
+            discovered["section_number"] = sect
         
         # search for class number like 482, put it in both classes and courses sections
         found = re.search(" (\d\d\d) ", query)
         if found:
-            if "classes" not in discovered:
-                discovered["classes"] = []
-            if "courses" not in discovered:
-                discovered["courses"] = []
             foundReg = True
             classNum = found[1]
-            discovered["classes"].append(classNum)
-            discovered["courses"].append(classNum)
+            discovered["course_number"] = classNum
 
         return discovered, foundReg
