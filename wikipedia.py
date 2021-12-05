@@ -8,9 +8,10 @@ import pickle
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
 
 def cleanText(text):
-    return re.sub("(\[ edit \])|(\[[0-9]*\])", "", text)
+    return re.sub("(\[.*\])|(\[[0-9]*\])", "", text)
 
 def buildDataFrame(soup):
     bodyContent = soup.find("div", {"id": "bodyContent"})
@@ -92,7 +93,7 @@ def getDF():
     sents = allDF[5].loc[:, 'tokenized_sents']
 
     # Build TFIDF Vectorizer
-    vec = TfidfVectorizer(norm=None, max_df=0.2)
+    vec = TfidfVectorizer(norm=None, max_df=0.2, stop_words=stopwords.words('english'))
     vec.fit(sents)
     tf_idf_sparse_sents = vec.transform(sents)
 

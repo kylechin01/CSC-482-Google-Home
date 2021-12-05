@@ -39,6 +39,7 @@ def completeWebscrape():
 
 def handleQuery(query, p, schP, wikiRet):
     qp = p.preprocessAndClassifyQuery(query)
+    resp = ""
     if qp["classification"] == "schedules":
         resp = schP.getResponse(qp)
     elif qp["classification"] == "wikipedia":

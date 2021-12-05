@@ -11,3 +11,8 @@ To run the project for the first time:\
 Then run the following in a python interpreter:\
     3. import nltk\
     4. nltk.download('punkt')
+
+To make the python environment:
+1. Install Conda (https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+2. Then run the command:
+`conda env create -f environment.yml`

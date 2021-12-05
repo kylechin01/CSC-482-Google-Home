@@ -11,8 +11,9 @@ def hello():
 def deal_with_query(query):
     p, wikiRet, schDf = mainHelpers.initMain()
     resp = mainHelpers.handleQuery(query, p, schDf, wikiRet)
-    print(query)
-    print(resp)
+    print('Q: ', query)
+    print('A: ', resp)
+        
     return resp
 
 # if __name__ == '__main__':
