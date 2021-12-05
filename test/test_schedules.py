@@ -72,3 +72,10 @@ class SchedulesTest(unittest.TestCase):
         testQ("What is the name of CPE 202", ["CPE", "202", "data structures"])
         testQ("What is the name of COMS 101", ["COMS", "101", "public speaking", "A1"])
         testQ("What GE does COMS 101 satisfy", ["COMS", "101", "public speaking", "A1"])
+    
+    def test_noProfInitials(self):
+        # make sure there are no single letter professor keywords
+        for p in schDict["instructor_names"]:
+            if len(p) <= 1:
+                print(p)
+                self.assertTrue(False)
