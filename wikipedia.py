@@ -156,7 +156,7 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, question):
                 ans = allDF[0].loc[ind, "B"] + "."
                 return ans
 
-        ans = getResponseSents(allDF[5], vec, tf_idf_sparse_sents, question)
+        ans = getResponseSents(allDF[4], vec, tf_idf_sparse_sents, question)
         return ans
 
 # webscrapeWikipedia()
