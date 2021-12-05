@@ -12,7 +12,7 @@ def initMain():
     Initializes all data needed for the main function including
     preprocessing, schedules, and wikipedia related objects
     """
-    if False: # TODO: have a condition so it only webscrapes when needed
+    if True: # TODO: have a condition so it only webscrapes when needed
         completeWebscrape()
 
     # Get DF and related info for wikipedia

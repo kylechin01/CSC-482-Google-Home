@@ -2,8 +2,8 @@
 
 import unittest
 import sys
-import json
 sys.path.append('../')
+import json
 
 from classification import *
 
@@ -80,11 +80,14 @@ class ClassificationTest(unittest.TestCase):
 
         c, d = p.classify("CSC 482 section 2")
         self.assertEqual(c, "schedules")
-        self.assertEqual("482", d["course_number"])
-        self.assertEqual("02", d["section_number"])
+        self.assertEqual(len(d["course_numbers"]), 1)
+        self.assertEqual(len(d["section_numbers"]), 1)
+        self.assertEqual("482", d["course_numbers"][0])
+        self.assertEqual("02", d["section_numbers"][0])
 
         c, d = p.classify("CSC 482 section 42")
-        self.assertEqual("42", d["section_number"])
+        self.assertEqual(len(d["section_numbers"]), 1)
+        self.assertEqual("42", d["section_numbers"][0])
 
     def test_both(self):
         t1 = "This is definitely a sentence."
@@ -96,11 +99,3 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(d["classification"], "wikipedia")
         self.assertEqual(d["cats"], {})
         self.assertEqual(d["meta"].iloc[0]["token"], "This")
-    
-    def test_multiProfNamesKeywords(self):
-        p = Preprocessor(officialSchDict)
-
-        d, c = p.findKeyWords("Foaad Khosmood")
-        self.assertTrue(c)
-        self.assertTrue("Foaad" in d)
-        self.assertTrue("Khosmood" in d)
