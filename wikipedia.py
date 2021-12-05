@@ -86,7 +86,7 @@ def getDF():
     allDF = pickle.load(file)
     file.close()
 
-    sents = allDF[5].loc[:, 'tokenized_sents']
+    sents = allDF[4].loc[:, 'tokenized_sents']
 
     # Build TFIDF Vectorizer
     vec = TfidfVectorizer(norm=None, max_df=0.2, stop_words=stopwords.words('english'))
@@ -156,7 +156,7 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, question):
                 ans = allDF[0].loc[ind, "B"] + "."
                 return ans
 
-        ans = getResponseSents(allDF[5], vec, tf_idf_sparse_sents, question)
+        ans = getResponseSents(allDF[4], vec, tf_idf_sparse_sents, question)
         return ans
 
 # webscrapeWikipedia()
