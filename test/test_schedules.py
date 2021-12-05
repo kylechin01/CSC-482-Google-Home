@@ -76,6 +76,21 @@ class SchedulesTest(unittest.TestCase):
         testTerm("When was CSC 480 section 4 Fall 2022?", ["could not find any term"])
         testTerm("When was CSC 480 section 4 Fall?", ["could not find any term"])
 
+    def test_handleCourseClassQuestions(self):
+        def testQ(query, expectedTerms):
+            qp = p.preprocessAndClassifyQuery(query)
+            if qp["classification"] != "schedules":
+                self.assertTrue(False) # wrong classification
+            resp = schedulesProcessor.getResponse(qp)
+            print(f"Given: {query}\nReturn: {resp}\n\n")
+            for t in expectedTerms:
+                self.assertTrue(t.lower() in resp.lower())
+
+        testQ("Is CSC 480 offered next quarter?", ["is offered", "4 sections"])
+        testQ("Is CSC 482 offered next quarter?", ["CSC 482 is not offered"])
+        testQ("What CSC classes are offered next quarter?", ["68", "CSC", "65 others"])
+        testQ("What MATH classes are offered next quarter?", ["56", "MATH", "53 others"])
+
     def test_handleNameOfCourseQuestion(self):
         def testQ(query, expectedTerms):
             qp = p.preprocessAndClassifyQuery(query)

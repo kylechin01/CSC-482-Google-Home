@@ -9,10 +9,10 @@ class Processor:
         self.dfs = dfs
         # A list of all the dataframe names
         self.table_names = dfs.keys()
+        # TODO, keywords.json should export the current term for easy extraction
         self.current_term = 2218
+        # TThe term that the query is about, defaulting to the current term
         self.specified_term = self.current_term
-        # for name in self.table_names:
-        #     self.df_identifiers[name] = list(self.dfs[name].columns.values)
 
     # Given a query, respond with an appropriate answer.
     def getResponse(self, qp):
@@ -23,17 +23,6 @@ class Processor:
         print("Lemmatized toks from query: " + str(query_lemmas))
         print("Keywords from query: \n" + json.dumps(query_keywords, 
             sort_keys=True, indent=4))
-
-        """
-        num_hits = {key: 0 for key in self.table_names}
-        for lemma in query_lemmas:
-            for df_name, df_identifier in self.df_identifiers.items():
-                for identifier in df_identifier:
-                    if re.match(identifier, lemma):
-                        print("Identifier hit found on \"" + lemma + "\" for " + df_name)
-                        num_hits[df_name] += 1
-        print(num_hits)
-        """
 
         return self.determineQuestionType(query_lemmas, query_keywords)
 
@@ -122,12 +111,12 @@ class Processor:
     """
     def determineQuestionType(self, lemmas, keywords):
         lemmas = [self.normalizeLemma(le) for le in lemmas]
+
         term = self.getTerm(lemmas, keywords)
         if term:
             self.specified_term = term
         else:
             return "I could not find any term that matches those values."
-
         term_string = ""
         if self.specified_term != self.current_term:
             term_string = f"For {self.getTermNameFromId(self.specified_term).iloc[0]}, "
@@ -140,44 +129,28 @@ class Processor:
             the entirety of the class table's primary key).
             """
             return term_string + self.handleClassTimeQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):
-            """
-            The question is asking about which classes the given professor teaches
-            """
+        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):            
+            # The question is asking about which classes the given professor teaches
             return term_string + self.handleClassProfessorQuestion(keywords)
         elif self.filterQuestion(lemmas, keywords, ["enrol", "capacity", "waitlist", "drop"],
             ["department_codes", "course_numbers", "section_numbers"]):
+            # The question is asking the enrollments of a class
             return term_string + self.handleClassEnrollmentsQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["who", "where"],
+        elif self.filterQuestion(lemmas, keywords, ["who", "where", "instructor", "building"],
             ["department_codes", "course_numbers", "section_numbers"]):
+            # The question is asking the location or professor of a class
             return term_string + self.handleClassDetailsQuestion(keywords)
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return term_string + self.handleOfficeQuestion(keywords)
         elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE", "ge"], ["course_numbers"]):
+            # The query is about a course name or ge
             return term_string + self.handleCourseQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["course", "offer", "teach"], ["department_codes"]):
+            return term_string + self.handleCourseByDepartmentQuestion(keywords)
         else:
             # Returning an empty string indicates the answer may be in wikipedia
             return ""
-        # elif "section_number" in keywords:
-        #     return self.handleClassQuestion(keywords)
-        # # TODO, google may parse GE as two words
-        # # TODO fix prereq for google parsings
-        # elif ("requirements" in lemmas or "prereq" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleRequirementsOfCourseQuestion(keywords)
-        # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleNameOfClassQuestion(keywords)
-        # elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
-        #     len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
-        #     return self.handleClassQuestion(keywords)
-        # elif len(keywords["instructor_names"]) > 0:
-        #     # Only professor name was given, return information about that
-        #     # professor. 
-        #     return self.handleInstructorQuestion(keywords)
-        # else:
-        #     return "I\'m sorry, I don't understand the question."
 
     """
     Returns the relevant row (or rows) of the Instructors table
@@ -202,18 +175,45 @@ class Processor:
         dept = res["Department"]
         return f"Professor {profName} from department {dept} has office hours in building {ohLoc[0]} room {ohLoc[1]}"
 
-    # TODO
-    def handleInstructorQuestion(self, keywords):
-        return ""
+    def handleCourseByDepartmentQuestion(self, keywords):
+        df = self.dfs["courses"]
+        # Assuming only one specified department
+        department = keywords["department_codes"][0]
 
-    # TODO
-    def handleClassQuestion(self, keywords):
-        df_classes = self.dfs["classses"]
-        # res = df_classes.loc["Name" == keywords["course_numbers"]
-        #     "Section" == keywords["section_numbers"]
-        return None
+        course_number = None
+        if "course_numbers" in keywords:
+            course_number = keywords["course_numbers"][0]
 
-    # TODO
+        if course_number:
+            df_res = df.loc[(df["Department"] == department) &
+                (df["Id"].str.contains(course_number)) &
+                (df["Term"] == self.specified_term)]
+            if df_res.empty:
+                return f"{department} {course_number} is not offered."
+
+            df_classes = self.dfs["classes"]
+            section_count_df = df_classes.loc[(df_classes["Name"].str.contains(department)) &
+                (df_classes["Name"].str.contains(course_number)) &
+                (df_classes["Term"] == self.specified_term)]
+            section_count = section_count_df.shape[0]
+            return f"{department} {course_number} is offered. There are {section_count} sections of the course. "
+
+        df_res = df.loc[(df["Department"] == department) &
+                (df["Term"] == self.specified_term)]
+        
+        if df_res.empty:
+            return f"The {department} is not offering any courses."
+
+        num_rows = df_res.shape[0]
+        output = f"There are {num_rows} {department} courses being offered: "
+        i = 0
+        while i < 3 and i < num_rows:
+            output += df_res.iloc[i]["Id"] + ", "
+            i += 1
+        if i < num_rows:
+            output += f"and {num_rows - i} others"
+        return output + "."
+
     def handleCourseQuestion(self, keywords):
         """
         Given a number of a course, return the course description
@@ -237,18 +237,6 @@ class Processor:
         
         return f"{courseid} is called {courseDesc}" + ("" if len(ges) < 1\
             else " and it satisfies the following general education requirements " + " ".join(ges))
-
-    # TODO
-    def handleGEsOfCourseQuestion(self, keywords):
-        return ""
-
-    # TODO
-    def handleRequirementsOfCourseQuestion(self, keywords):
-        return ""
-
-    # TODO
-    def handleNameOfClassQuestion(self, keywords):
-        return ""
 
     def handleClassDetailsQuestion(self, keywords):
         df = self.dfs["classes"]
@@ -346,9 +334,6 @@ class Processor:
                 # all values in names list are in this instructor name
                 return instr
         return None
-
-# Query assumptions:
-#   Term is current
 
 # === Answer is just a cell in the db ===
 # What time does CSC 482 section 02 start?
