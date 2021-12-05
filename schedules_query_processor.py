@@ -104,23 +104,19 @@ class Processor:
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE"], ["course_numbers"]):
+            return self.handleCourseQuestion(keywords)
         else: # TEMP
             return "Sorry, I do not know the answer to that"
         # elif "section_number" in keywords:
         #     return self.handleClassQuestion(keywords)
-        # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_number" in keywords:
-        #     return self.handleNameOfCourseQuestion(keywords)
         # # TODO, google may parse GE as two words
-        # elif ("general" in lemmas or "GE" in lemmas) and \
-        #     "course_number" in keywords:
-        #     return self.handleGEsOfCourseQuestion(keywords)
         # # TODO fix prereq for google parsings
         # elif ("requirements" in lemmas or "prereq" in lemmas) and \
-        #     "course_number" in keywords:
+        #     "course_numbers" in keywords:
         #     return self.handleRequirementsOfCourseQuestion(keywords)
         # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_number" in keywords:
+        #     "course_numbers" in keywords:
         #     return self.handleNameOfClassQuestion(keywords)
         # elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
         #     len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
@@ -140,7 +136,7 @@ class Processor:
     """
     def handleOfficeQuestion(self, keywords):
         # Get the row for the correct professor
-        curTerm = 2218 # TODO: don't hard code this, put it in Keywords file
+        curTerm = self.current_term
         resDf = self.dfs["instructors"]
         resDf = resDf[resDf["Term"] == curTerm]
         name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
@@ -168,8 +164,30 @@ class Processor:
         return None
 
     # TODO
-    def handleNameOfCourseQuestion(self, keywords):
-        return ""
+    def handleCourseQuestion(self, keywords):
+        """
+        Given a number of a course, return the course description
+        """
+        dept = keywords["department_codes"][0]
+        courseNum = keywords["course_numbers"][0]
+        courseid = f"{dept} {courseNum}"
+
+        coursesDf = self.dfs["courses"]
+        coursesDf = coursesDf[coursesDf["Id"] == courseid]
+        coursesDf = coursesDf[coursesDf["Term"] == coursesDf["Term"].max()]
+
+        print(coursesDf)
+        courseDesc = coursesDf.iloc[0]["Description"]
+        geStr = coursesDf.iloc[0]["GE"]
+        ges = []
+        if isinstance(geStr, str):
+            for i in range(0, len(geStr), 2):
+                x = geStr[i:i+2]
+                if x != "GE":
+                    ges.append(x)
+        
+        return f"{courseid} is called {courseDesc}" + ("" if len(ges) < 1\
+            else " and it satisfies the following general education requirements " + " ".join(ges))
 
     # TODO
     def handleGEsOfCourseQuestion(self, keywords):
