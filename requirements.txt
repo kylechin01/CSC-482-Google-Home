@@ -2,3 +2,4 @@ spacy
 nltk
 pandas
 requests
+bs4
