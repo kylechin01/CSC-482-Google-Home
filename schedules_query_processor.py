@@ -162,10 +162,17 @@ class Processor:
         """
         Given a number of a course, return the course description
         """
+        dept = keywords["department_codes"][0]
         courseNum = keywords["course_numbers"][0]
-        print()
+        courseid = f"{dept} {courseNum}"
+
+        coursesDf = self.dfs["courses"]
+        coursesDf = coursesDf[coursesDf["Id"] == courseid]
+        coursesDf = coursesDf[coursesDf["Term"] == coursesDf["Term"].max()]
+
+        courseDesc = coursesDf.iloc[0]["Description"]
         
-        return ""
+        return f"{courseid} is called {courseDesc}"
 
     # TODO
     def handleGEsOfCourseQuestion(self, keywords):
