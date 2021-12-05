@@ -37,3 +37,6 @@ class SchedulesTest(unittest.TestCase):
         
         testOH("Where are Foaad Khosmood's office hours?", ["professor khosmood", "building 14", "room 213"])
         testOH("Where are Amy Carter's office hours?", ["professor carter", "building 3", "room 100"])
+
+    def test_handleNameOfCourseQuestion(self):
+        pass

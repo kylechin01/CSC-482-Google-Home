@@ -89,23 +89,23 @@ class Processor:
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
+        elif ("name" in lemmas or "description" in lemmas) and \
+            "course_numbers" in keywords and len(keywords["course_numbers"]) == 1:
+            return self.handleNameOfCourseQuestion(keywords)
         else: # TEMP
             return "Sorry, I do not know the answer to that"
         # elif "section_number" in keywords:
         #     return self.handleClassQuestion(keywords)
-        # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_number" in keywords:
-        #     return self.handleNameOfCourseQuestion(keywords)
         # # TODO, google may parse GE as two words
         # elif ("general" in lemmas or "GE" in lemmas) and \
-        #     "course_number" in keywords:
+        #     "course_numbers" in keywords:
         #     return self.handleGEsOfCourseQuestion(keywords)
         # # TODO fix prereq for google parsings
         # elif ("requirements" in lemmas or "prereq" in lemmas) and \
-        #     "course_number" in keywords:
+        #     "course_numbers" in keywords:
         #     return self.handleRequirementsOfCourseQuestion(keywords)
         # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_number" in keywords:
+        #     "course_numbers" in keywords:
         #     return self.handleNameOfClassQuestion(keywords)
         # elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
         #     len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
@@ -125,7 +125,7 @@ class Processor:
     """
     def handleOfficeQuestion(self, keywords):
         # Get the row for the correct professor
-        curTerm = 2218 # TODO: don't hard code this, put it in Keywords file
+        curTerm = self.current_term
         resDf = self.dfs["instructors"]
         resDf = resDf[resDf["Term"] == curTerm]
         name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
@@ -154,6 +154,12 @@ class Processor:
 
     # TODO
     def handleNameOfCourseQuestion(self, keywords):
+        """
+        Given a number of a course, return the course description
+        """
+        courseNum = keywords["course_numbers"][0]
+        print()
+        
         return ""
 
     # TODO
