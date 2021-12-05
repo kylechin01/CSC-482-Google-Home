@@ -86,7 +86,7 @@ def getDF():
     allDF = pickle.load(file)
     file.close()
 
-    sents = allDF[5].loc[:, 'tokenized_sents']
+    sents = allDF[4].loc[:, 'tokenized_sents']
 
     # Build TFIDF Vectorizer
     vec = TfidfVectorizer(norm=None, max_df=0.2, stop_words=stopwords.words('english'))
