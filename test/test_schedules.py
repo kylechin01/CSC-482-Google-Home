@@ -7,21 +7,16 @@ sys.path.append('../')
 from mainHelpers import *
 from schedules_query_processor import *
 
-import os
-print(os.getcwd())
-os.chdir("./..")
-print(os.getcwd())
-
 
 wikiret = None
 
 # Get DF and related info for schedules
 schDf = {}
-df_files = glob.glob("data/*.csv")
+df_files = glob.glob("../data/*.csv")
 for file in df_files:
     df_name = re.split("\\\\|/|\.", file)[1]
     schDf[df_name] = pd.read_csv(file, encoding="ISO-8859-1")
-with open("data/keywords.json") as json_file:
+with open("../data/keywords.json") as json_file:
     schDict = json.load(json_file)
 
 schedulesProcessor = Processor(schDf)

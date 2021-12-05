@@ -2,9 +2,9 @@
 
 import unittest
 import sys
+sys.path.append('../')
 import json
 
-sys.path.append('../')
 from classification import *
 
 class ClassificationTest(unittest.TestCase):
@@ -77,11 +77,14 @@ class ClassificationTest(unittest.TestCase):
 
         c, d = p.classify("CSC 482 section 2")
         self.assertEqual(c, "schedules")
-        self.assertEqual("482", d["course_number"])
-        self.assertEqual("02", d["section_number"])
+        self.assertEqual(len(d["course_numbers"]), 1)
+        self.assertEqual(len(d["section_numbers"]), 1)
+        self.assertEqual("482", d["course_numbers"][0])
+        self.assertEqual("02", d["section_numbers"][0])
 
         c, d = p.classify("CSC 482 section 42")
-        self.assertEqual("42", d["section_number"])
+        self.assertEqual(len(d["section_numbers"]), 1)
+        self.assertEqual("42", d["section_numbers"][0])
 
     def test_both(self):
         t1 = "This is definitely a sentence."
