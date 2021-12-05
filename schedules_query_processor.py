@@ -81,41 +81,46 @@ class Processor:
         if self.filterQuestion(lemmas, keywords, ["when", "time"], 
             ["department_codes", "course_numbers", "section_numbers"]):
             """
-            The question is asking about a row in the classes table identifiable
-            by primary key (-ish, the given keywords due not constitute the entirety
-            of the class table's primary key).
+            The question is asking about class times and provides a pseudo-primary
+            key for the classes table (-ish, the given keywords due not constitute 
+            the entirety of the class table's primary key).
             """
             return self.handleClassTimeQuestion(keywords)
-        """
-        if "office" in lemmas:
+        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):
+            """
+            The question is asking about which classes the given professor teaches
+            """
+            return self.handleClassProfessorQuestion(keywords)
+        elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
-        elif "section_number" in keywords:
-            return self.handleClassQuestion(keywords)
         elif ("name" in lemmas or "description" in lemmas) and \
-            "course_number" in keywords:
+            "course_numbers" in keywords and len(keywords["course_numbers"]) == 1:
             return self.handleNameOfCourseQuestion(keywords)
-        # TODO, google may parse GE as two words
-        elif ("general" in lemmas or "GE" in lemmas) and \
-            "course_number" in keywords:
-            return self.handleGEsOfCourseQuestion(keywords)
-        # TODO fix prereq for google parsings
-        elif ("requirements" in lemmas or "prereq" in lemmas) and \
-            "course_number" in keywords:
-            return self.handleRequirementsOfCourseQuestion(keywords)
-        elif ("name" in lemmas or "description" in lemmas) and \
-            "course_number" in keywords:
-            return self.handleNameOfClassQuestion(keywords)
-        elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
-            len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
-            return self.handleClassQuestion(keywords)
-        elif len(keywords["instructor_names"]) > 0:
-            # Only professor name was given, return information about that
-            # professor. 
-            return self.handleInstructorQuestion(keywords)
-        else:
-            return "I\'m sorry, I don't understand the question."
-        """
+        else: # TEMP
+            return "Sorry, I do not know the answer to that"
+        # elif "section_number" in keywords:
+        #     return self.handleClassQuestion(keywords)
+        # # TODO, google may parse GE as two words
+        # elif ("general" in lemmas or "GE" in lemmas) and \
+        #     "course_numbers" in keywords:
+        #     return self.handleGEsOfCourseQuestion(keywords)
+        # # TODO fix prereq for google parsings
+        # elif ("requirements" in lemmas or "prereq" in lemmas) and \
+        #     "course_numbers" in keywords:
+        #     return self.handleRequirementsOfCourseQuestion(keywords)
+        # elif ("name" in lemmas or "description" in lemmas) and \
+        #     "course_numbers" in keywords:
+        #     return self.handleNameOfClassQuestion(keywords)
+        # elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
+        #     len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
+        #     return self.handleClassQuestion(keywords)
+        # elif len(keywords["instructor_names"]) > 0:
+        #     # Only professor name was given, return information about that
+        #     # professor. 
+        #     return self.handleInstructorQuestion(keywords)
+        # else:
+        #     return "I\'m sorry, I don't understand the question."
 
     """
     Returns the relevant row (or rows) of the Instructors table
@@ -125,7 +130,7 @@ class Processor:
     """
     def handleOfficeQuestion(self, keywords):
         # Get the row for the correct professor
-        curTerm = 2218 # TODO: don't hard code this, put it in Keywords file
+        curTerm = self.current_term
         resDf = self.dfs["instructors"]
         resDf = resDf[resDf["Term"] == curTerm]
         name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
@@ -154,6 +159,12 @@ class Processor:
 
     # TODO
     def handleNameOfCourseQuestion(self, keywords):
+        """
+        Given a number of a course, return the course description
+        """
+        courseNum = keywords["course_numbers"][0]
+        print()
+        
         return ""
 
     # TODO
@@ -167,6 +178,20 @@ class Processor:
     # TODO
     def handleNameOfClassQuestion(self, keywords):
         return ""
+
+    def handleClassProfessorQuestion(self, keywords):
+        df = self.dfs["classes"]
+        professor_name = self.getProfessorNameFromKeywords(self.dfs["instructors"], keywords["instructor_names"])
+        professor_name_trunc = re.search("^(.+, [A-Z]).*", professor_name)[1]
+        df_res = df.loc[(df["Instructor"] == professor_name_trunc) & 
+            (df["Term"] == self.current_term)]
+        class_names = df_res["Name"]
+        output = f"Professor {professor_name} is teaching {len(class_names)} classes. "
+        if len(class_names) > 0:
+            output += "These classes are "
+        for class_name in class_names:
+            output += class_name + ", "
+        return output
 
     def handleClassTimeQuestion(self, keywords):
         df = self.dfs["classes"]

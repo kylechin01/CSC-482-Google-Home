@@ -1,4 +1,3 @@
-from typing import AnyStr
 import nltk
 # nltk.download('punkt')
 import re
@@ -9,9 +8,10 @@ import pickle
 from bs4 import BeautifulSoup
 from nltk.tokenize import sent_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
 
 def cleanText(text):
-    return re.sub("(\[ edit \])|(\[[0-9]*\])", "", text)
+    return re.sub("(\[.*\])|(\[[0-9]*\])", "", text)
 
 def buildDataFrame(soup):
     bodyContent = soup.find("div", {"id": "bodyContent"})
@@ -56,13 +56,13 @@ def webscrapeWikipedia():
     allDF = []
     
     tablesDF[0] = tablesDF[0].rename(columns={0:"A", 1:"B"})
-    tablesDF[0]["A"] = tablesDF[0]["A"].str.replace("\[[0-9]*\]", "").str.strip()
-    tablesDF[0]["B"] = tablesDF[0]["B"].str.replace("\[[0-9]*\]", "").str.strip()
+    tablesDF[0]["A"] = tablesDF[0]["A"].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
+    tablesDF[0]["B"] = tablesDF[0]["B"].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
     tablesDF[0] = tablesDF[0].dropna()
     tablesDF[0] = tablesDF[0].loc[tablesDF[0]["A"]!="Colors"]
     allDF.append(tablesDF[0])
 
-    tablesDF[2][tablesDF[2].columns[0]] = tablesDF[2][tablesDF[2].columns[0]].str.replace("\[[0-9]*\]", "").str.strip()
+    tablesDF[2][tablesDF[2].columns[0]] = tablesDF[2][tablesDF[2].columns[0]].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
     tablesDF[2] = tablesDF[2].loc[tablesDF[2][tablesDF[2].columns[0]]!=tablesDF[2][tablesDF[2].columns[1]]]
     allDF.append(tablesDF[2])
 
@@ -89,7 +89,7 @@ def getDF():
     sents = allDF[5].loc[:, 'tokenized_sents']
 
     # Build TFIDF Vectorizer
-    vec = TfidfVectorizer(norm=None, max_df=0.2)
+    vec = TfidfVectorizer(norm=None, max_df=0.2, stop_words=stopwords.words('english'))
     vec.fit(sents)
     tf_idf_sparse_sents = vec.transform(sents)
 
