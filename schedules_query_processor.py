@@ -94,7 +94,7 @@ class Processor:
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "ge"], ["course_numbers"]):
+        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE"], ["course_numbers"]):
             return self.handleCourseQuestion(keywords)
         else: # TEMP
             return "Sorry, I do not know the answer to that"

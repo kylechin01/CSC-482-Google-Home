@@ -71,3 +71,4 @@ class SchedulesTest(unittest.TestCase):
         testQ("What is the name of CSC 482", ["speech and language processing", "CSC", "482"])
         testQ("What is the name of CPE 202", ["CPE", "202", "data structures"])
         testQ("What is the name of COMS 101", ["COMS", "101", "public speaking", "A1"])
+        testQ("What GE does COMS 101 satisfy", ["COMS", "101", "public speaking", "A1"])
