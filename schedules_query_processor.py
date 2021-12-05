@@ -94,17 +94,13 @@ class Processor:
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
-        elif ("name" in lemmas or "description" in lemmas) and \
-            "course_numbers" in keywords and len(keywords["course_numbers"]) == 1:
-            return self.handleNameOfCourseQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "ge"], ["course_numbers"]):
+            return self.handleCourseQuestion(keywords)
         else: # TEMP
             return "Sorry, I do not know the answer to that"
         # elif "section_number" in keywords:
         #     return self.handleClassQuestion(keywords)
         # # TODO, google may parse GE as two words
-        # elif ("general" in lemmas or "GE" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleGEsOfCourseQuestion(keywords)
         # # TODO fix prereq for google parsings
         # elif ("requirements" in lemmas or "prereq" in lemmas) and \
         #     "course_numbers" in keywords:
@@ -158,7 +154,7 @@ class Processor:
         return None
 
     # TODO
-    def handleNameOfCourseQuestion(self, keywords):
+    def handleCourseQuestion(self, keywords):
         """
         Given a number of a course, return the course description
         """
@@ -170,9 +166,18 @@ class Processor:
         coursesDf = coursesDf[coursesDf["Id"] == courseid]
         coursesDf = coursesDf[coursesDf["Term"] == coursesDf["Term"].max()]
 
+        print(coursesDf)
         courseDesc = coursesDf.iloc[0]["Description"]
+        geStr = coursesDf.iloc[0]["GE"]
+        ges = []
+        if isinstance(geStr, str):
+            for i in range(0, len(geStr), 2):
+                x = geStr[i:i+2]
+                if x != "GE":
+                    ges.append(x)
         
-        return f"{courseid} is called {courseDesc}"
+        return f"{courseid} is called {courseDesc}" + ("" if len(ges) < 1\
+            else " and it satisfies the following general education requirements " + " ".join(ges))
 
     # TODO
     def handleGEsOfCourseQuestion(self, keywords):
