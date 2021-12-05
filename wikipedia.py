@@ -118,16 +118,16 @@ def getResponseSents(df, vec, tf_idf_sparse_sents, question):
     ans = sub_df.iloc[0]['tokenized_sents']
 
     # Printing for development purposes...
-    # print(most_similar.head(5))
-    # print()
-    # print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
-    # print()
-    # print(ans)
-    # print(sim_value)
-    # print()
+    print(most_similar.head(5))
+    print()
+    print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
+    print()
+    print(ans)
+    print(sim_value)
+    print()
 
     # Check if cosine similarity is below the threshold
-    if sim_value < THRESHOLD:
+    if pd.isna(sim_value) or sim_value < THRESHOLD:
         print(ans)
         ans = "The answer could not be found on the Wikipedia page for Cal Poly."
     return ans
