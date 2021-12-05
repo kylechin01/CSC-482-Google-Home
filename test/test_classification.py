@@ -7,7 +7,7 @@ sys.path.append('../')
 
 from classification import *
 
-with open("data/keywords.json") as json_file:
+with open("../data/keywords.json") as json_file:
     officialSchDict = json.load(json_file)
 
 class ClassificationTest(unittest.TestCase):
