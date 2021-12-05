@@ -119,7 +119,6 @@ class Processor:
 
     """
     Determines the intent of the query and attempts to answer said intent.
-
     """
     def determineQuestionType(self, lemmas, keywords):
         lemmas = [self.normalizeLemma(le) for le in lemmas]

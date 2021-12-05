@@ -50,7 +50,7 @@ def webscrapeWikipedia():
     # Order of list of tables:
     #   0. Basic Info (Motto/President/etc)
     #   1. Rankings
-    #   2. Demographics TODO
+    #   2. Demographics
     #   3. Rivals
     #   4. Sentences
     allDF = []
@@ -66,7 +66,7 @@ def webscrapeWikipedia():
     tablesDF[2] = tablesDF[2].loc[tablesDF[2][tablesDF[2].columns[0]]!=tablesDF[2][tablesDF[2].columns[1]]]
     allDF.append(tablesDF[2])
 
-    tablesDF[4] = tablesDF[4].rename(columns=lambda x: re.sub('\[[0-9]*\]','',x.strip())).rename(columns={tablesDF[4].columns[0]:"Demographic"})
+    tablesDF[4] = tablesDF[4].rename(columns=lambda x: re.sub('\[[0-9]*\]','',x.strip()))
     allDF.append(tablesDF[4])
 
     tablesDF[7] = tablesDF[7].rename(columns={0:"A", 1:"B"})
@@ -118,13 +118,13 @@ def getResponseSents(df, vec, tf_idf_sparse_sents, question):
     ans = sub_df.iloc[0]['tokenized_sents']
 
     # Printing for development purposes...
-    print(most_similar.head(5))
-    print()
-    print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
-    print()
-    print(ans)
+    # print(most_similar.head(5))
+    # print()
+    # print(df.loc[most_similar.head(5).index, 'tokenized_sents'])
+    # print()
+    # print(ans)
     print(sim_value)
-    print()
+    # print()
 
     # Check if cosine similarity is below the threshold
     if pd.isna(sim_value) or sim_value < THRESHOLD:
@@ -132,7 +132,14 @@ def getResponseSents(df, vec, tf_idf_sparse_sents, question):
         ans = "The answer could not be found on the Wikipedia page for Cal Poly."
     return ans
 
-def getResponse(allDF, vec, tf_idf_sparse_sents, question):
+def getLemmatized(qd):
+    x = qd['meta'].loc[:, 'lemma'].values
+    x = " ".join(x)
+    return qd['strQuery']
+
+def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
+    question = getLemmatized(quesDict)
+
     ans = ""
     if("ranking" in question.lower()):
         cnt = 0
@@ -152,9 +159,27 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, question):
     
         for ind, row in allDF[0].iterrows():
             s = row["A"].lower()
+            flag = "student" in s and "how many" not in question.lower()
             if s in question.lower():
+                if flag:
+                    continue
                 ans = allDF[0].loc[ind, "B"] + "."
                 return ans
+
+        if("percent" in question.lower()):
+            for ind, row in allDF[2].iterrows():
+                s = row[allDF[2].columns[0]].lower()
+                s = re.split('/| ',s)
+                print(s)
+                for x in s:
+                    if x=="male" and x not in question.lower().replace("female", ""):
+                        continue
+                    if x in question.lower() and "american" not in x:
+                        perc = allDF[2].loc[ind, allDF[2].columns[1]]
+                        if(perc=="Null"):
+                            perc = "none"
+                        ans = allDF[2].loc[ind, allDF[2].columns[0]] + " make up " + perc + " of Cal Poly."
+                        return ans
 
         ans = getResponseSents(allDF[4], vec, tf_idf_sparse_sents, question)
         return ans

@@ -22,6 +22,9 @@ class Preprocessor:
         """
         self.nlp = spacy.load("en_core_web_sm")
         self.schWords = schWords
+        self.schWordsUpper = {}
+        if "department_codes" in self.schWords:
+            self.schWordsUpper = {"department_codes": self.schWords.pop("department_codes")}
         # TODO: include the schedules word lists here
 
     def preprocessAndClassifyQuery(self, input):
@@ -87,10 +90,33 @@ class Preprocessor:
         """
         # TODO
         discovered, foundKey = self.findKeyWords(query)
+        discovered, foundDept = self.findKeyWordsUpper(query, discovered)
         discovered, foundReg = self.findRegex(query, discovered)
-        return (("schedules" if foundKey or foundReg else "wikipedia"), discovered,)
+        return (("schedules" if foundKey or foundReg or foundDept else "wikipedia"), discovered,)
     
+    def findKeyWordsUpper(self, query, discovered):
+        """
+        Checks for keywords that must match case
+        Mainly intended to find uppercase department codes
+        """
+        query = " " + query + " "
+        found_a_keyword = False
+        for cat in self.schWordsUpper:
+            found_keywords = []
+            for pat in self.schWordsUpper[cat]:
+                if type(pat) == str:
+                    stripped_pat = " " + pat + "[\' ]"
+                    found_word = re.search(stripped_pat, query)
+                    if found_word:
+                        found_keywords.append(pat)
+                        found_a_keyword = True
+            discovered[cat] = found_keywords
+        return discovered, found_a_keyword
+
     def findKeyWords(self, query):
+        """
+        Checks for keywords that do not require matching case
+        """
         query = " " + query.lower() + " "
         discovered = {}
         found_a_keyword = False
