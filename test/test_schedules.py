@@ -38,8 +38,28 @@ class SchedulesTest(unittest.TestCase):
         testOH("Where are Amy Carter's office hours?", ["professor carter", "building 3", "room 100"])
         testOH("Where are Amy Carter's office hours?", ["professor carter", "building 3", "room 100"])
 
-    def test_handleClassQuestion(self):
-        def testClass(query, expectedTerms):
+    # def test_handleClassQuestion(self):
+    #     def testClass(query, expectedTerms):
+    #         qp = p.preprocessAndClassifyQuery(query)
+    #         if qp["classification"] != "schedules":
+    #             self.assertTrue(False) # wrong classification
+    #         resp = schedulesProcessor.getResponse(qp)
+    #         print(f"Given: {query}\nReturn: {resp}\n\n")
+    #         for t in expectedTerms:
+    #             self.assertTrue(t.lower() in resp.lower())
+
+    #     testClass("When is CSC 482 section 2?", ["MWF", "12:10 PM", "1:00 PM"])
+    #     testClass("What time is CSC 482 section 1?", ["MWF", "11:10 AM", "12:00 PM"])
+    #     testClass("What time is CSC 482 section 03?", ["MWF", "2:10 PM", "3:00 PM"])
+    #     testClass("What time is CSC 482 section 99?", ["could not find"])
+
+    #     testClass("What classes is Foaad teaching this quarter?", ["14 classes", "CSC", "CPE"])
+    #     testClass("What classes is Foaad teaching next quarter?", ["lorem"])
+    #     testClass("What classes is Foaad teaching?", ["14 classes", "CSC", "CPE"])
+    #     testClass("What classes is Mammen teaching?", ["0 classes"])
+
+    def test_handleNameOfCourseQuestion(self):
+        def testQ(query, expectedTerms):
             qp = p.preprocessAndClassifyQuery(query)
             if qp["classification"] != "schedules":
                 self.assertTrue(False) # wrong classification
@@ -47,16 +67,6 @@ class SchedulesTest(unittest.TestCase):
             print(f"Given: {query}\nReturn: {resp}\n\n")
             for t in expectedTerms:
                 self.assertTrue(t.lower() in resp.lower())
-
-        testClass("When is CSC 482 section 2?", ["MWF", "12:10 PM", "1:00 PM"])
-        testClass("What time is CSC 482 section 1?", ["MWF", "11:10 AM", "12:00 PM"])
-        testClass("What time is CSC 482 section 03?", ["MWF", "2:10 PM", "3:00 PM"])
-        testClass("What time is CSC 482 section 99?", ["could not find"])
-
-        testClass("What classes is Foaad teaching this quarter?", ["14 classes", "CSC", "CPE"])
-        testClass("What classes is Foaad teaching next quarter?", ["lorem"])
-        testClass("What classes is Foaad teaching?", ["14 classes", "CSC", "CPE"])
-        testClass("What classes is Mammen teaching?", ["0 classes"])
-
-    def test_handleNameOfCourseQuestion(self):
-        pass
+        
+        testQ("What is the name of CSC 482", ["speech and language processing", "CSC", "482"])
+        testQ("What is the name of CPE 202", ["CPE", "202", "data structures"])
