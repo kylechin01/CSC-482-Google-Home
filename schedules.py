@@ -64,6 +64,9 @@ def build_class_table(soup):
             data.pop(4)
             # Remove requirements
             data.pop(4)
+            # Replace name cell with full name
+            # NOTE: do not do this as the processor works around this
+            # data[8] = row.find("td", {"class": "personName"}).find("a")["title"]
             # Remove location capacity
             data.pop(9)
             # Remove ICS

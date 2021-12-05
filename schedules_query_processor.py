@@ -81,11 +81,16 @@ class Processor:
         if self.filterQuestion(lemmas, keywords, ["when", "time"], 
             ["department_codes", "course_numbers", "section_numbers"]):
             """
-            The question is asking about a row in the classes table identifiable
-            by primary key (-ish, the given keywords due not constitute the entirety
-            of the class table's primary key).
+            The question is asking about class times and provides a pseudo-primary
+            key for the classes table (-ish, the given keywords due not constitute 
+            the entirety of the class table's primary key).
             """
             return self.handleClassTimeQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):
+            """
+            The question is asking about which classes the given professor teaches
+            """
+            return self.handleClassProfessorQuestion(keywords)
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
@@ -173,6 +178,20 @@ class Processor:
     # TODO
     def handleNameOfClassQuestion(self, keywords):
         return ""
+
+    def handleClassProfessorQuestion(self, keywords):
+        df = self.dfs["classes"]
+        professor_name = self.getProfessorNameFromKeywords(self.dfs["instructors"], keywords["instructor_names"])
+        professor_name_trunc = re.search("^(.+, [A-Z]).*", professor_name)[1]
+        df_res = df.loc[(df["Instructor"] == professor_name_trunc) & 
+            (df["Term"] == self.current_term)]
+        class_names = df_res["Name"]
+        output = f"Professor {professor_name} is teaching {len(class_names)} classes. "
+        if len(class_names) > 0:
+            output += "These classes are "
+        for class_name in class_names:
+            output += class_name + ", "
+        return output
 
     def handleClassTimeQuestion(self, keywords):
         df = self.dfs["classes"]

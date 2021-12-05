@@ -7,6 +7,9 @@ import json
 
 from classification import *
 
+with open("../data/keywords.json") as json_file:
+    officialSchDict = json.load(json_file)
+
 class ClassificationTest(unittest.TestCase):
 
     def test_preprocessing(self):
