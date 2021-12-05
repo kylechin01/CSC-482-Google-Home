@@ -104,10 +104,11 @@ class Processor:
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE"], ["course_numbers"]):
+        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE", "ge"], ["course_numbers"]):
             return self.handleCourseQuestion(keywords)
-        else: # TEMP
-            return "Sorry, I do not know the answer to that"
+        else:
+            # Returning an empty string indicates the answer may be in wikipedia
+            return ""
         # elif "section_number" in keywords:
         #     return self.handleClassQuestion(keywords)
         # # TODO, google may parse GE as two words
@@ -176,7 +177,6 @@ class Processor:
         coursesDf = coursesDf[coursesDf["Id"] == courseid]
         coursesDf = coursesDf[coursesDf["Term"] == coursesDf["Term"].max()]
 
-        print(coursesDf)
         courseDesc = coursesDf.iloc[0]["Description"]
         geStr = coursesDf.iloc[0]["GE"]
         ges = []
