@@ -30,7 +30,8 @@ def clean_instructor_names(instructor_names):
             name = re.sub(",|\.|\+", "", name)
             toks = name.split()
             for tok in toks:
-                name_set.add(tok)
+                if len(tok) > 1:
+                    name_set.add(tok)
     return list(name_set)
 
 def main():

@@ -70,6 +70,10 @@ class ClassificationTest(unittest.TestCase):
         t("What classes is professor khosmood teaching this quarter?", s)
         t("What CSC classes are being offered next quarter?", s)
 
+        # check dept ME vs person me issue
+        t("what is me to this", w)
+        t("what is ME to this", s)
+
         # TODO: classifications to fix: professor names that are also words are incorrectly classifying as 
         # schedules queries such as black, white, sky, call, etc
         # t("Is cal poly a good school?", w)
