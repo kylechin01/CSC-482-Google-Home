@@ -49,8 +49,9 @@ class Processor:
             at_least_one_lemma_found = True
             # a tad inefficient here 
         for q_lemma in query_lemmas:
-            if q_lemma in target_lemmas:
-                at_least_one_lemma_found = True
+            for t_lemma in target_lemmas:
+                if t_lemma in q_lemma:
+                    at_least_one_lemma_found = True
         if len(target_cats) == 0:
             return at_least_one_lemma_found
         at_least_one_keyword_cat_missing = False
@@ -62,7 +63,7 @@ class Processor:
     """
     Collapse various lemmas into a standardized version.
     """
-    def normalizeLemmas(self, lemma):
+    def normalizeLemma(self, lemma):
         lemma = lemma.lower()
         if lemma in ["teacher", "professor", "prof", "instructor", "lecturer"]:
             return "instructor"
@@ -70,6 +71,8 @@ class Processor:
             return "start"
         elif lemma in ["class"]:
             return "course"
+        elif lemma in ["place, building"]:
+            return "location"
         return lemma
 
     """
@@ -78,6 +81,7 @@ class Processor:
 
     """
     def determineQuestionType(self, lemmas, keywords):
+        lemmas = [self.normalizeLemma(le) for le in lemmas]
         if self.filterQuestion(lemmas, keywords, ["when", "time"], 
             ["department_codes", "course_numbers", "section_numbers"]):
             """
@@ -91,20 +95,22 @@ class Processor:
             The question is asking about which classes the given professor teaches
             """
             return self.handleClassProfessorQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["enrol", "capacity", "waitlist", "drop"],
+            ["department_codes", "course_numbers", "section_numbers"]):
+            return self.handleClassEnrollmentsQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["who", "where"],
+            ["department_codes", "course_numbers", "section_numbers"]):
+            return self.handleClassDetailsQuestion(keywords)
         elif "office" in lemmas:
             # The query is about office hours or office location.
             return self.handleOfficeQuestion(keywords)
-        elif ("name" in lemmas or "description" in lemmas) and \
-            "course_numbers" in keywords and len(keywords["course_numbers"]) == 1:
-            return self.handleNameOfCourseQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE"], ["course_numbers"]):
+            return self.handleCourseQuestion(keywords)
         else: # TEMP
             return "Sorry, I do not know the answer to that"
         # elif "section_number" in keywords:
         #     return self.handleClassQuestion(keywords)
         # # TODO, google may parse GE as two words
-        # elif ("general" in lemmas or "GE" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleGEsOfCourseQuestion(keywords)
         # # TODO fix prereq for google parsings
         # elif ("requirements" in lemmas or "prereq" in lemmas) and \
         #     "course_numbers" in keywords:
@@ -158,7 +164,7 @@ class Processor:
         return None
 
     # TODO
-    def handleNameOfCourseQuestion(self, keywords):
+    def handleCourseQuestion(self, keywords):
         """
         Given a number of a course, return the course description
         """
@@ -170,9 +176,18 @@ class Processor:
         coursesDf = coursesDf[coursesDf["Id"] == courseid]
         coursesDf = coursesDf[coursesDf["Term"] == coursesDf["Term"].max()]
 
+        print(coursesDf)
         courseDesc = coursesDf.iloc[0]["Description"]
+        geStr = coursesDf.iloc[0]["GE"]
+        ges = []
+        if isinstance(geStr, str):
+            for i in range(0, len(geStr), 2):
+                x = geStr[i:i+2]
+                if x != "GE":
+                    ges.append(x)
         
-        return f"{courseid} is called {courseDesc}"
+        return f"{courseid} is called {courseDesc}" + ("" if len(ges) < 1\
+            else " and it satisfies the following general education requirements " + " ".join(ges))
 
     # TODO
     def handleGEsOfCourseQuestion(self, keywords):
@@ -186,13 +201,47 @@ class Processor:
     def handleNameOfClassQuestion(self, keywords):
         return ""
 
+    def handleClassDetailsQuestion(self, keywords):
+        df = self.dfs["classes"]
+        class_name = list(map(lambda i, j : i + " " + j, 
+            keywords["department_codes"], keywords["course_numbers"]))[0]
+        section_number = int(keywords["section_numbers"][0])
+        df_res = df.loc[(df["Name"] == class_name) & 
+            (df["Section"] == section_number) &
+            (df["Term"] == self.current_term)]
+        if df_res.empty:
+            output = "I could not find any classes that match that description."
+        else:
+            location_toks = df_res['Location'].iloc[0].split("-")
+            building_no = location_toks[0]
+            room_no = location_toks[1]
+            output = f"{df_res['Name'].iloc[0]} section {df_res['Section'].iloc[0]} is a {df_res['Type'].iloc[0]} class " + \
+                f"taught by Professor {df_res['Instructor'].iloc[0].split(',')[0]} at building {building_no} room {room_no}."
+        return output
+
+    def handleClassEnrollmentsQuestion(self, keywords):
+        df = self.dfs["classes"]
+        class_name = list(map(lambda i, j : i + " " + j, 
+            keywords["department_codes"], keywords["course_numbers"]))[0]
+        section_number = int(keywords["section_numbers"][0])
+        df_res = df.loc[(df["Name"] == class_name) & 
+            (df["Section"] == section_number) &
+            (df["Term"] == self.current_term)]
+        if df_res.empty:
+            output = "I could not find any classes that match that description."
+        else:
+            output = f"{df_res['Name'].iloc[0]} section {df_res['Section'].iloc[0]} has a maximum enrollment capacity of " + \
+                f"{df_res['Enrollment Capacity'].iloc[0]}. There are currently {df_res['Enrollment Count'].iloc[0]} students " + \
+                f"enrolled, with {df_res['Waitlist Count'].iloc[0]} on the waitlist."
+        return output
+
     def handleClassProfessorQuestion(self, keywords):
         df = self.dfs["classes"]
         professor_name = self.getProfessorNameFromKeywords(self.dfs["instructors"], keywords["instructor_names"])
         professor_name_trunc = re.search("^(.+, [A-Z]).*", professor_name)[1]
         df_res = df.loc[(df["Instructor"] == professor_name_trunc) & 
             (df["Term"] == self.current_term)]
-        class_names = df_res["Name"]
+        class_names = set(df_res["Name"])
         output = f"Professor {professor_name} is teaching {len(class_names)} classes. "
         if len(class_names) > 0:
             output += "These classes are "
