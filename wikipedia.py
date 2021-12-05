@@ -48,12 +48,11 @@ def webscrapeWikipedia():
     df = buildDataFrame(soup)
 
     # Order of list of tables:
-    #   1. Basic Info (Motto/President/etc)
-    #   2. Academic Stats (Applicants/Enrolled/GPA/SAT/etc) TODO
-    #   3. Rankings
-    #   4. Demographics TODO
-    #   5. Rivals
-    #   6. Sentences
+    #   0. Basic Info (Motto/President/etc)
+    #   1. Rankings
+    #   2. Demographics TODO
+    #   3. Rivals
+    #   4. Sentences
     allDF = []
     
     tablesDF[0] = tablesDF[0].rename(columns={0:"A", 1:"B"})
@@ -62,9 +61,6 @@ def webscrapeWikipedia():
     tablesDF[0] = tablesDF[0].dropna()
     tablesDF[0] = tablesDF[0].loc[tablesDF[0]["A"]!="Colors"]
     allDF.append(tablesDF[0])
-    
-    tablesDF[1] = tablesDF[1].dropna().rename(columns={tablesDF[1].columns[0]:"Category"})
-    allDF.append(tablesDF[1])
 
     tablesDF[2][tablesDF[2].columns[0]] = tablesDF[2][tablesDF[2].columns[0]].str.replace("\[[0-9]*\]", "", regex=True).str.strip()
     tablesDF[2] = tablesDF[2].loc[tablesDF[2][tablesDF[2].columns[0]]!=tablesDF[2][tablesDF[2].columns[1]]]
@@ -140,18 +136,18 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, question):
     ans = ""
     if("ranking" in question.lower()):
         cnt = 0
-        for ind, row in allDF[2].iterrows():
-            ans += row[allDF[2].columns[0]] + " ranks Cal Poly as " + row[allDF[2].columns[1]] + ". "
+        for ind, row in allDF[1].iterrows():
+            ans += row[allDF[1].columns[0]] + " ranks Cal Poly as " + row[allDF[1].columns[1]] + ". "
             cnt += 1
             if(cnt>=3):
                 return ans
     else:
-        for ind, row in allDF[4].iterrows():
+        for ind, row in allDF[3].iterrows():
             s = row["A"].lower()
             if s.endswith("s"):
                 s = s[:len(s)-1]
             if s in question.lower():
-                ans = allDF[4].loc[ind, "A"] + " are " + allDF[4].loc[ind, "B"] + "."
+                ans = allDF[3].loc[ind, "A"] + " are " + allDF[3].loc[ind, "B"] + "."
                 return ans
     
         for ind, row in allDF[0].iterrows():
