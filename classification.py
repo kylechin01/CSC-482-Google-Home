@@ -156,4 +156,10 @@ class Preprocessor:
             classNum = found[1]
             discovered["course_numbers"] = [classNum]
 
+        # search for a GE 
+        found = re.search(" ([A-Ga-g][1-9])", query)
+        if found:
+            foundReg = True
+            discovered["ge"] = [found[1]]
+
         return discovered, foundReg

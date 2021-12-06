@@ -91,6 +91,22 @@ class SchedulesTest(unittest.TestCase):
         testQ("What CSC classes are offered next quarter?", ["68", "CSC", "65 others"])
         testQ("What MATH classes are offered next quarter?", ["56", "MATH", "53 others"])
 
+    def test_GEFulfillmentQuestions(self):
+        def testQ(query, expectedTerms):
+            qp = p.preprocessAndClassifyQuery(query)
+            if qp["classification"] != "schedules":
+                self.assertTrue(False) # wrong classification
+            resp = schedulesProcessor.getResponse(qp)
+            print(f"Given: {query}\nReturn: {resp}\n\n")
+            for t in expectedTerms:
+                self.assertTrue(t.lower() in resp.lower())
+
+        testQ("A1 GE?", ["3 courses"])
+        testQ("C1 GE?", ["21 courses", "18 others"])
+        testQ("F1 GE?", ["no courses"])
+        testQ("C1 ARCH GE?", ["1 ARCH course"])
+        testQ("C1 MATH GE?", ["no MATH courses"])
+
     def test_handleNameOfCourseQuestion(self):
         def testQ(query, expectedTerms):
             qp = p.preprocessAndClassifyQuery(query)
