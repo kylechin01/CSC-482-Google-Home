@@ -159,7 +159,7 @@ def getLemmatizedQues(qd):
     return x
 
 def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
-    question = getLemmatizedQues(quesDict)
+    question = getLemmatizedQues(quesDict).lower()
     nlp = spacy.load("en_core_web_sm")
 
     ans = ""
@@ -172,28 +172,29 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
                 return ans
     else:
         for ind, row in allDF[3].iterrows():
-            s = lemmatizeSent(row["A"], nlp)
-            if s in question.lower():
+            s = lemmatizeSent(row["A"], nlp).lower()
+            if s in question:
                 ans = allDF[3].loc[ind, "A"] + " are " + allDF[3].loc[ind, "B"] + "."
                 return ans
     
         for ind, row in allDF[0].iterrows():
-            s = lemmatizeSent(row["A"], nlp)
+            s = lemmatizeSent(row["A"], nlp).lower()
             flag = "student" in s and "how many" not in quesDict['strQuery'].lower()
-            if s in question.lower():
+            if s in question:
                 if flag:
                     continue
                 ans = allDF[0].loc[ind, "B"] + "."
                 return ans
 
-        if("percent" in question.lower()):
+        if("percent" in question):
             for ind, row in allDF[2].iterrows():
-                s = lemmatizeSent(row[allDF[2].columns[0]], nlp)
+                s = lemmatizeSent(row[allDF[2].columns[0]], nlp).lower()
                 s = re.split('/| ',s)
+                s = [w for w in s if w]
                 for x in s:
-                    if x=="male" and x not in question.lower().replace("female", ""):
+                    if x=="male" and x not in question.replace("female", ""):
                         continue
-                    if x in question.lower() and "american" not in x:
+                    if x in question and "american" not in x:
                         perc = allDF[2].loc[ind, allDF[2].columns[1]]
                         if(perc=="Null"):
                             perc = "none"
@@ -201,7 +202,7 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
                         return ans
 
         ans = getResponseSents(allDF[4], vec, tf_idf_sparse_sents, question)
-        return ans
+        return ans.replace("\"", "")
 
 # webscrapeWikipedia()
 # ans = getResponse("What is the average GPA?")
