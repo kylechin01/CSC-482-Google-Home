@@ -146,6 +146,10 @@ class Processor:
         elif self.filterQuestion(lemmas, keywords, ["name", "description", "general", "GE", "ge"], ["course_numbers"]):
             # The query is about a course name or ge
             return term_string + self.handleCourseQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["GE", "ge"]) and re.match(".*[A-Za-z][0-9].*", " ".join(lemmas)):
+            # The query is about finding satisfying classes for a GE
+            GE = re.search("([A-Za-z][0-9])", " ".join(lemmas))[1]
+            return term_string + self.handleCourseByGEQuestion(keywords, GE)
         elif self.filterQuestion(lemmas, keywords, ["course", "offer", "teach"], ["department_codes"]):
             return term_string + self.handleCourseByDepartmentQuestion(keywords)
         else:
@@ -310,12 +314,45 @@ class Processor:
                 f"and ends at {res['End Time'].iloc[0]}."
         return output
 
-    def handleCourseByGEQuestion(self, keywords):
-        
-        return
+    def handleCourseByGEQuestion(self, keywords, GE):
+        df = self.dfs["courses"]
+        if len(keywords["department_codes"]) > 0:
+            department_code = keywords["department_codes"][0]
+            df_res = df.loc[(df["GE"].str.contains(GE.upper())) &
+                (df["Department"] == department_code) &
+                (df["Term"] == self.specified_term)]
+        else:
+            df_res = df.loc[(df["GE"].str.contains(GE.upper())) &
+                (df["Term"] == self.specified_term)]
 
-    def handleDatesQuestion(self, keywords):
-        return
+        num_rows = df_res.shape[0]
+        
+        if num_rows == 0:
+            output = "There are no "
+        elif num_rows == 1:
+            output = "There is 1 "
+        else:
+            output = f"There are {num_rows} "
+
+        if len(keywords["department_codes"]) > 0:
+            output += str(department_code) + " " 
+
+        if num_rows == 1:
+            output += "course "
+        else:
+            output += "courses "
+        output += f"that satisfy the {GE} GE"
+        if num_rows == 0:
+            return output + "."
+        
+        output += ": "
+        i = 0
+        while i < 3 and i < num_rows:
+            output += df_res.iloc[i]["Id"] + ", "
+            i += 1
+        if i < num_rows:
+            output += f"and {num_rows - i} others"
+        return output + "."
 
     def getTermIdFromKeywords(self, term_year, term_season):
         df = self.dfs["terms"]    
