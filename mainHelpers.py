@@ -12,7 +12,7 @@ def initMain():
     Initializes all data needed for the main function including
     preprocessing, schedules, and wikipedia related objects
     """
-    if False: # TODO: have a condition so it only webscrapes when needed
+    if True: # TODO: have a condition so it only webscrapes when needed
         completeWebscrape()
 
     # Get DF and related info for wikipedia
@@ -42,6 +42,12 @@ def handleQuery(query, p, schP, wikiRet):
     resp = ""
     if qp["classification"] == "schedules":
         resp = schP.getResponse(qp)
+        if resp == "":
+            resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp)
     elif qp["classification"] == "wikipedia":
         resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp)
+        if resp == "":
+            resp = schP.getResponse(qp)
+    if resp == "":
+        resp = "Sorry I don't know how to respond to that."
     return resp

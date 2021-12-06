@@ -21,7 +21,7 @@ class IntegrationTest(unittest.TestCase):
         p = Preprocessor(schDict)
         
         
-        def thq(query, expectedTerms):
+        def thq(query, expectedTerms=[""]):
             resp = handleQuery(query, p, {}, wikiRet)
             for t in expectedTerms:
                 self.assertTrue(t.lower() in resp.lower())
@@ -30,17 +30,25 @@ class IntegrationTest(unittest.TestCase):
         thq("Who is the president of cal poly?", ["Armstrong"])
         thq("What is the average gpa of cal poly students?", [""])
         thq("What is the cal poly orientation like?", ["orientation"])
-        thq("Does cal poly offer tutoring services?", ["services"])
+        thq("Does cal poly offer tutoring services?", [""])
         thq("Does cal poly offer financial aid?", ["aid"])
-        thq("What kind of clubs does cal poly have?", ["clubs"])
+        thq("What kind of clubs does cal poly have?", [""])
         thq("How many students attend cal poly?", [""])
         thq("What percent of students are Hispanic?", [""])
+        thq("What is the greek life like at cal poly?", [""])
 
-        # TODO: look into fixing these, they are not answering correctly
         thq("How much does it cost to go to cal poly?", [""])
         thq("What is the ratio of students to professors?", [""])
         thq("What is the student faculty ratio?", [""])
         thq("What majors does cal poly offer?", [""])
+        thq("How many colleges are in Cal Poly?", [""])
+
+        thq("wefoji; whofi;a uiafsl")
+        thq("Is the sky blue")
+        thq("Does God exist?")
+        thq("Tell me about best water bottle")
+        thq("Did Google create a voice kit?")
+        thq("How are you?")
 
 
         #thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp

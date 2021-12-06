@@ -1,0 +1,224 @@
+WITHOUT LEMMATIZATION:
+
+Given: Who is the president of cal poly?
+Return: Jeffrey Armstrong.
+
+
+..\wikipedia.py:121: RuntimeWarning: invalid value encountered in true_divide
+  cosSimilarity = dot / (a_len * b_len)
+80     0.276558
+82     0.196479
+112    0.176582
+29     0.167913
+84     0.135981
+Name: 0, dtype: float64
+
+80     Fall 2019 entering students had an average GPA...
+82     Cal Poly requires students to declare a major ...
+112    Due to continued reductions in state funding, ...
+29     In 1903, Cal Poly San Luis Obispo opened as a ...
+84     Each major has a specific change of major plan...
+Name: tokenized_sents, dtype: object
+
+Fall 2019 entering students had an average GPA of 3.99; the middle 50% range of  SAT  scores was 620–700 for reading and writing, and 620–740 for math, while the  ACT  Composite range was 26–32.
+0.2765576174853076
+
+Given: What is the average gpa of cal poly students?
+Return: Fall 2019 entering students had an average GPA of 3.99; the middle 50% range of  SAT  scores was 620–700 for reading and writing, and 620–740 for math, while the  ACT  Composite range was 26–32.
+
+
+173    0.309135
+170    0.308447
+171    0.208909
+169    0.200582
+167    0.191403
+Name: 0, dtype: float64
+
+173    The program started in 1956 and is now the lar...
+170    The "WOW" groups participate in an array of or...
+171    In 2010, the awareness section of the program ...
+169    Freshmen are placed in a group with 10–12 othe...
+167    The Week of Welcome program, more commonly kno...
+Name: tokenized_sents, dtype: object
+
+The program started in 1956 and is now the largest volunteer orientation program in the nation.
+0.30913544176085905
+
+Given: What is the cal poly orientation like?
+Return: The program started in 1956 and is now the largest volunteer orientation program in the nation.
+
+
+212    0.408719
+11     0.220170
+210    0.192284
+14     0.145500
+217    0.131918
+Name: 0, dtype: float64
+
+212    It provides commercial services, fiscal servic...
+11     The institution began to offer Bachelor of Art...
+210    Academic Affairs also includes the Library, Re...
+14     The college was authorized to offer Master of ...
+217    The Cal Poly Extended Education provides acces...
+Name: tokenized_sents, dtype: object
+
+It provides commercial services, fiscal services, and key support services to assist and promote the educational mission of Cal Poly and the California State University System (CSU).
+0.40871900644354175
+
+Given: Does cal poly offer tutoring services?
+Return: It provides commercial services, fiscal services, and key support services to assist and promote the educational mission of Cal Poly and the California State University System (CSU).
+
+
+113    0.288935
+255    0.206148
+11     0.167345
+14     0.110590
+260    0.000000
+Name: 0, dtype: float64
+
+113    Of the students enrolled in fall 2014, 61.6% o...
+255    Peter Oppenheimer , Chief Financial Officer of...
+11     The institution began to offer Bachelor of Art...
+14     The college was authorized to offer Master of ...
+260                 Weird Al Yankovic , comedic musician
+Name: tokenized_sents, dtype: object
+
+Of the students enrolled in fall 2014, 61.6% of undergraduates and 70.0% of first-time freshmen received some form of financial aid in 2014–15.
+0.2889346898512659
+
+Given: Does cal poly offer financial aid?
+Return: Of the students enrolled in fall 2014, 61.6% of undergraduates and 70.0% of first-time freshmen received some form of financial aid in 2014–15.
+
+
+176    0.475790
+175    0.376940
+177    0.275523
+260    0.000000
+95     0.000000
+Name: 0, dtype: float64
+
+176    Included (a full list available on the  Associ...
+175    Cal Poly has many recognized clubs and indepen...
+177    Especially impressive are the engineering club...
+260                 Weird Al Yankovic , comedic musician
+95                         Computer Engineering : second
+Name: tokenized_sents, dtype: object
+
+Included (a full list available on the  Associated Students, Incorporated  website) are over 150 groups, including, among many others, cultural clubs and exchanges, mathematics and science clubs, religious and atheistic groups, service organizations, engineering research and development clubs, professional development organizations, a perennial Rose Parade Float design program, LGBTQ+ and Multicultural groups, competitive and social athletic teams, and academic honors clubs.
+0.47579038161752213
+
+Given: What kind of clubs does cal poly have?
+Return: Included (a full list available on the  Associated Students, Incorporated  website) are over 150 groups, including, among many others, cultural clubs and exchanges, mathematics and science clubs, religious and atheistic groups, service organizations, engineering research and development clubs, professional development organizations, a perennial Rose Parade Float design program, LGBTQ+ and Multicultural groups, competitive and social athletic teams, and academic honors clubs.
+
+
+Given: How many students attend cal poly?
+Return: 22,287 (Fall 2020).
+
+
+Given: What percent of students are Hispanic?
+Return: Hispanic/Latino Americans make up 18% of Cal Poly.
+
+
+0   NaN
+1   NaN
+2   NaN
+3   NaN
+4   NaN
+Name: 0, dtype: float64
+
+0    California Polytechnic State University, San L...
+1    It is one of  two polytechnics  in the  Califo...
+2    The university is organized into six colleges ...
+3    Cal Poly San Luis Obispo primarily focuses on ...
+4    The academic focus is on combining technical a...
+Name: tokenized_sents, dtype: object
+
+California Polytechnic State University, San Luis Obispo  ( California Polytechnic State University ,   is a  public university  in  San Luis Obispo, California .
+nan
+
+Given: How much does it cost to go to cal poly?
+Return: The answer could not be found on the Wikipedia page for Cal Poly.
+
+
+50     0.261844
+29     0.205619
+124    0.155293
+49     0.149834
+74     0.127380
+Name: 0, dtype: float64
+
+50     To maintain the university's Learn by Doing ph...
+29     In 1903, Cal Poly San Luis Obispo opened as a ...
+124          All buildings house students of all majors.
+49     The Cal Poly Master Plan calls to increase stu...
+74     All undergraduate students at Cal Poly are req...
+Name: tokenized_sents, dtype: object
+
+To maintain the university's Learn by Doing philosophy and low class sizes, the master plan calls for an increase in classrooms, laboratories, and professors.
+0.26184437343852723
+
+Given: What is the ratio of students to professors?
+Return: To maintain the university's Learn by Doing philosophy and low class sizes, the master plan calls for an increase in classrooms, laboratories, and professors.
+
+
+117    0.191352
+220    0.159040
+172    0.152650
+64     0.151052
+51     0.146661
+Name: 0, dtype: float64
+
+117    Cal Poly's on-campus student housing of 6,239 ...
+220    ASI provides co-curricular experiences for stu...
+172    The awareness section was entirely developed b...
+64     Currently, there are over 6,500 bike rack spac...
+51     A dormitory style student community was comple...
+Name: tokenized_sents, dtype: object
+
+Cal Poly's on-campus student housing of 6,239 spaces
+0.1913515522531739
+
+Given: What is the student faculty ratio?
+Return: The answer could not be found on the Wikipedia page for Cal Poly.
+
+
+124    0.368273
+83     0.301177
+85     0.263572
+11     0.215738
+14     0.142571
+Name: 0, dtype: float64
+
+124          All buildings house students of all majors.
+83     As a result, changing majors at the university...
+85     In some cases, students wishing to change majo...
+11     The institution began to offer Bachelor of Art...
+14     The college was authorized to offer Master of ...
+Name: tokenized_sents, dtype: object
+
+All buildings house students of all majors.
+0.3682727759013236
+
+Given: What majors does cal poly offer?
+Return: All buildings house students of all majors.
+
+
+175    0.298292
+101    0.235715
+209    0.201220
+76     0.167416
+2      0.158848
+Name: 0, dtype: float64
+
+175    Cal Poly has many recognized clubs and indepen...
+101    Cal Poly ranked 40th in the U.S. for in-state ...
+209    The academic division is organized into six co...
+76     On campus towards Poly Canyon, a popular area ...
+2      The university is organized into six colleges ...
+Name: tokenized_sents, dtype: object
+
+Cal Poly has many recognized clubs and independent student organizations operating on campus.
+0.29829219315596395
+
+Given: How many colleges are in Cal Poly?
+Return: Cal Poly has many recognized clubs and independent student organizations operating on campus.
