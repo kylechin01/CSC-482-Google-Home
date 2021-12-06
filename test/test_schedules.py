@@ -71,7 +71,7 @@ class SchedulesTest(unittest.TestCase):
         testTerm("When is CSC 480 section 1?", ["starts at 09:40 AM"])
         testTerm("When is CSC 480 section 1 this quarter?", ["starts at 09:40 AM"])
         testTerm("When is CSC 480 section 3 next quarter?", ["Winter Quarter 2022", "starts at 01:40 PM"])
-        testTerm("What was the waitlist status of CSC 480 section 3 last quarter?", ["Summer Quarter 2021", "3.0 on the waitlist"])
+        testTerm("What was the waitlist status of CSC 480 section 3 last quarter?", ["Summer Quarter 2021", "3 on the waitlist"])
         testTerm("When is CSC 480 section 3 Spring 2022?", ["Spring Quarter 2022", "08:10 AM"])
         testTerm("When was CSC 480 section 4 Fall 2022?", ["could not find any term"])
         testTerm("When was CSC 480 section 4 Fall?", ["could not find any term"])

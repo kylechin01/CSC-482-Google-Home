@@ -273,8 +273,8 @@ class Processor:
             output = "I could not find any classes that match that description."
         else:
             output = f"{df_res['Name'].iloc[0]} section {df_res['Section'].iloc[0]} has a maximum enrollment capacity of " + \
-                f"{df_res['Enrollment Capacity'].iloc[0]}. There are currently {df_res['Enrollment Count'].iloc[0]} students " + \
-                f"enrolled, with {df_res['Waitlist Count'].iloc[0]} on the waitlist."
+                f"{int(df_res['Enrollment Capacity'].iloc[0])}. There are currently {int(df_res['Enrollment Count'].iloc[0])} students " + \
+                f"enrolled, with {int(df_res['Waitlist Count'].iloc[0])} on the waitlist."
         return output
 
     def handleClassProfessorQuestion(self, keywords):
