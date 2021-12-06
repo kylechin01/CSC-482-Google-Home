@@ -71,7 +71,7 @@ class CloudSpeechClient:
 	    encoding=speech.types.RecognitionConfig.AudioEncoding.LINEAR16,
             sample_rate_hertz=AUDIO_SAMPLE_RATE_HZ,
             language_code=language_code,
-            speech_contexts=[speech.types.SpeechContext(phrases=hint_phrases, boost=20)])
+            speech_contexts=[speech.types.SpeechContext(phrases=hint_phrases)])
 
     def recognize_bytes(self, data, language_code='en-US', hint_phrases=None):
         """
