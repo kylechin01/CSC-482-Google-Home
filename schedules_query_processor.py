@@ -280,6 +280,8 @@ class Processor:
     def handleClassProfessorQuestion(self, keywords):
         df = self.dfs["classes"]
         professor_name = self.getProfessorNameFromKeywords(self.dfs["instructors"], keywords["instructor_names"])
+        if professor_name is None:
+            return "Sorry, I don't know which professor you're talking about"
         professor_name_trunc = re.search("^(.+, [A-Z]).*", professor_name)[1]
         df_res = df.loc[(df["Instructor"] == professor_name_trunc) & 
             (df["Term"] == self.specified_term)]

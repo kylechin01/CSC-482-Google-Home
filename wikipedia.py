@@ -63,6 +63,7 @@ def webscrapeWikipedia():
     #   2. Demographics
     #   3. Rivals
     #   4. Sentences
+    #   5. Academics
     allDF = []
     
     tablesDF[0] = tablesDF[0].rename(columns={0:"A", 1:"B"})
@@ -82,6 +83,12 @@ def webscrapeWikipedia():
     tablesDF[7] = tablesDF[7].rename(columns={0:"A", 1:"B"})
     allDF.append(tablesDF[7])
     allDF.append(df)
+
+    tablesDF[1] = tablesDF[1].dropna().rename(columns={tablesDF[1].columns[0]:"Category"}).drop(1).reset_index(drop=True)
+    tablesDF[1].at[1, 'Category'] = 'Admit'
+    tablesDF[1].at[4, 'Category'] = 'ACT'
+    tablesDF[1].at[5, 'Category'] = 'SAT'
+    allDF.append(tablesDF[1])
 
     # Save allDF to file
     filename = "wikiCPSents"
@@ -184,6 +191,15 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
                 if flag:
                     continue
                 ans = allDF[0].loc[ind, "B"] + "."
+                return ans
+
+        for ind, row in allDF[5].iterrows():
+            s = lemmatizeSent(row["Category"], nlp).lower()
+            if s in question:
+                ans = allDF[5].loc[ind, "Category"]
+                if(row['Category']=='Admit'):
+                    ans += " %"
+                ans += " is " + str(allDF[5].loc[ind, allDF[5].columns[1]])
                 return ans
 
         if("percent" in question):
