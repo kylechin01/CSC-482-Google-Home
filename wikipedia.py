@@ -140,13 +140,15 @@ def getResponseSents(df, vec, tf_idf_sparse_sents, question):
     ind = most_similar.head(1).index
     sub_df = df.loc[ind]
     ans = ""
-    sub_df_other = df.loc[ind-1]
-    if(sub_df_other.iloc[0]['h3']==sub_df.iloc[0]['h3'] and sub_df_other.iloc[0]['tag']==sub_df.iloc[0]['tag']):
-        ans += sub_df_other.iloc[0]['tokenized_sents'] + ". "
+    if ind>0:
+        sub_df_other = df.loc[ind-1]
+        if(sub_df_other.iloc[0]['h3']==sub_df.iloc[0]['h3'] and sub_df_other.iloc[0]['tag']==sub_df.iloc[0]['tag']):
+            ans += sub_df_other.iloc[0]['tokenized_sents'] + ". "
     ans += sub_df.iloc[0]['tokenized_sents'] + ". "
-    sub_df_other = df.loc[ind+1]
-    if(sub_df_other.iloc[0]['h3']==sub_df.iloc[0]['h3'] and sub_df_other.iloc[0]['tag']==sub_df.iloc[0]['tag']):
-        ans += sub_df_other.iloc[0]['tokenized_sents'] + ". "
+    if ind<len(df)-1:
+        sub_df_other = df.loc[ind+1]
+        if(sub_df_other.iloc[0]['h3']==sub_df.iloc[0]['h3'] and sub_df_other.iloc[0]['tag']==sub_df.iloc[0]['tag']):
+            ans += sub_df_other.iloc[0]['tokenized_sents'] + ". "
 
     # Printing for development purposes...
     # print(most_similar.head(5))
