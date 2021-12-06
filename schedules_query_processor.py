@@ -310,6 +310,13 @@ class Processor:
                 f"and ends at {res['End Time'].iloc[0]}."
         return output
 
+    def handleCourseByGEQuestion(self, keywords):
+        
+        return
+
+    def handleDatesQuestion(self, keywords):
+        return
+
     def getTermIdFromKeywords(self, term_year, term_season):
         df = self.dfs["terms"]    
         res = df[df["Name"].str.contains(term_year) & df["Name"].str.contains(term_season)]
