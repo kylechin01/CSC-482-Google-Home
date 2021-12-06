@@ -9,9 +9,10 @@ class Processor:
         self.dfs = dfs
         # A list of all the dataframe names
         self.table_names = dfs.keys()
+        # TODO, keywords.json should export the current term for easy extraction
         self.current_term = 2218
-        # for name in self.table_names:
-        #     self.df_identifiers[name] = list(self.dfs[name].columns.values)
+        # TThe term that the query is about, defaulting to the current term
+        self.specified_term = self.current_term
 
     # Given a query, respond with an appropriate answer.
     def getResponse(self, qp):
@@ -22,17 +23,6 @@ class Processor:
         print("Lemmatized toks from query: " + str(query_lemmas))
         print("Keywords from query: \n" + json.dumps(query_keywords, 
             sort_keys=True, indent=4))
-
-        """
-        num_hits = {key: 0 for key in self.table_names}
-        for lemma in query_lemmas:
-            for df_name, df_identifier in self.df_identifiers.items():
-                for identifier in df_identifier:
-                    if re.match(identifier, lemma):
-                        print("Identifier hit found on \"" + lemma + "\" for " + df_name)
-                        num_hits[df_name] += 1
-        print(num_hits)
-        """
 
         return self.determineQuestionType(query_lemmas, query_keywords)
 
@@ -73,13 +63,64 @@ class Processor:
             return "course"
         elif lemma in ["place, building"]:
             return "location"
+        elif lemma in ["quarter"]:
+            return "term"
+        elif lemma in ["spring"]:
+            return "Spring"
+        elif lemma in ["winter"]:
+            return "Summer"
+        elif lemma in ["autumn", "fall"]:
+            return "Fall"
+        elif lemma in ["winter"]:
+            return "Winter"
         return lemma
+
+    """
+    Get the term that the user is specifiying in their query. If no specification is made,
+    default to the current term. Return None when a term is specified with incomplete information
+    (ex. no year is given) or does not exist (ex. Spring 2050).
+    """
+    def getTerm(self, lemmas, keywords):
+        if self.filterQuestion(lemmas, keywords, ["term", "Spring", "Summer", "Fall", "Winter"]):
+            if self.filterQuestion(lemmas, keywords, ["this"]):
+                return self.current_term
+            elif self.filterQuestion(lemmas, keywords, ["next"]):
+                if self.current_term % 10 == 8:
+                    return self.current_term + 4
+                return self.current_term + 2
+            elif self.filterQuestion(lemmas, keywords, ["previous", "last"]):
+                if self.current_term % 10 == 2:
+                    return self.current_term - 4
+                return self.current_term - 2
+            elif self.filterQuestion(lemmas, keywords, ["Spring", "Summer", "Fall", "Winter"]):
+                query_year = None
+                query_season = None
+                for lemma in lemmas:
+                    if re.match("[0-9][0-9][0-9][0-9]", lemma):
+                        query_year = lemma
+                    elif re.match("([sS]pring)|([sS]ummer)|([fF]all)|([wW]inter)", lemma):
+                        query_season = lemma
+                if query_year and query_season:
+                    return self.getTermIdFromKeywords(query_year, query_season)
+                return None
+            return
+        return self.current_term
 
     """
     Determines the intent of the query and attempts to answer said intent.
     """
     def determineQuestionType(self, lemmas, keywords):
         lemmas = [self.normalizeLemma(le) for le in lemmas]
+
+        term = self.getTerm(lemmas, keywords)
+        if term:
+            self.specified_term = term
+        else:
+            return "I could not find any term that matches those values."
+        term_string = ""
+        if self.specified_term != self.current_term:
+            term_string = f"For {self.getTermNameFromId(self.specified_term).iloc[0]}, "
+
         if self.filterQuestion(lemmas, keywords, ["when", "time"], 
             ["department_codes", "course_numbers", "section_numbers"]):
             """
@@ -87,46 +128,30 @@ class Processor:
             key for the classes table (-ish, the given keywords due not constitute 
             the entirety of the class table's primary key).
             """
-            return self.handleClassTimeQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):
-            """
-            The question is asking about which classes the given professor teaches
-            """
-            return self.handleClassProfessorQuestion(keywords)
+            return term_string + self.handleClassTimeQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["teach"], ["instructor_names"]):            
+            # The question is asking about which classes the given professor teaches
+            return term_string + self.handleClassProfessorQuestion(keywords)
         elif self.filterQuestion(lemmas, keywords, ["enrol", "capacity", "waitlist", "drop"],
             ["department_codes", "course_numbers", "section_numbers"]):
-            return self.handleClassEnrollmentsQuestion(keywords)
-        elif self.filterQuestion(lemmas, keywords, ["who", "where"],
+            # The question is asking the enrollments of a class
+            return term_string + self.handleClassEnrollmentsQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["who", "where", "instructor", "building"],
             ["department_codes", "course_numbers", "section_numbers"]):
-            return self.handleClassDetailsQuestion(keywords)
+            # The question is asking the location or professor of a class
+            return term_string + self.handleClassDetailsQuestion(keywords)
         elif "office" in lemmas:
             # The query is about office hours or office location.
-            return self.handleOfficeQuestion(keywords)
+            return term_string + self.handleOfficeQuestion(keywords)
         elif self.filterQuestion(lemmas, keywords,\
-            ["name", "description", "general", "GE", "ge", "gen", "ed"], ["course_numbers"]):
-            return self.handleCourseQuestion(keywords)
+        ["name", "description", "general", "GE", "ge", "gen", "ed"], ["course_numbers"]):
+            # The query is about a course name or ge
+            return term_string + self.handleCourseQuestion(keywords)
+        elif self.filterQuestion(lemmas, keywords, ["course", "offer", "teach"], ["department_codes"]):
+            return term_string + self.handleCourseByDepartmentQuestion(keywords)
         else:
             # Returning an empty string indicates the answer may be in wikipedia
             return ""
-        # elif "section_number" in keywords:
-        #     return self.handleClassQuestion(keywords)
-        # # TODO, google may parse GE as two words
-        # # TODO fix prereq for google parsings
-        # elif ("requirements" in lemmas or "prereq" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleRequirementsOfCourseQuestion(keywords)
-        # elif ("name" in lemmas or "description" in lemmas) and \
-        #     "course_numbers" in keywords:
-        #     return self.handleNameOfClassQuestion(keywords)
-        # elif ("start" in lemmas or "end" in lemmas or "days" in lemmas) and \
-        #     len(keywords["department_codes"]) > 0 and len(keywords["classes"]) > 0:
-        #     return self.handleClassQuestion(keywords)
-        # elif len(keywords["instructor_names"]) > 0:
-        #     # Only professor name was given, return information about that
-        #     # professor. 
-        #     return self.handleInstructorQuestion(keywords)
-        # else:
-        #     return "I\'m sorry, I don't understand the question."
 
     """
     Returns the relevant row (or rows) of the Instructors table
@@ -136,9 +161,8 @@ class Processor:
     """
     def handleOfficeQuestion(self, keywords):
         # Get the row for the correct professor
-        curTerm = self.current_term
         resDf = self.dfs["instructors"]
-        resDf = resDf[resDf["Term"] == curTerm]
+        resDf = resDf[resDf["Term"] == self.specified_term]
         name = self.getProfessorNameFromKeywords(resDf, keywords["instructor_names"])
         resDf = resDf[resDf["Name"] == name]
 
@@ -152,18 +176,45 @@ class Processor:
         dept = res["Department"]
         return f"Professor {profName} from department {dept} has office hours in building {ohLoc[0]} room {ohLoc[1]}"
 
-    # TODO
-    def handleInstructorQuestion(self, keywords):
-        return ""
+    def handleCourseByDepartmentQuestion(self, keywords):
+        df = self.dfs["courses"]
+        # Assuming only one specified department
+        department = keywords["department_codes"][0]
 
-    # TODO
-    def handleClassQuestion(self, keywords):
-        df_classes = self.dfs["classses"]
-        # res = df_classes.loc["Name" == keywords["course_numbers"]
-        #     "Section" == keywords["section_numbers"]
-        return None
+        course_number = None
+        if "course_numbers" in keywords:
+            course_number = keywords["course_numbers"][0]
 
-    # TODO
+        if course_number:
+            df_res = df.loc[(df["Department"] == department) &
+                (df["Id"].str.contains(course_number)) &
+                (df["Term"] == self.specified_term)]
+            if df_res.empty:
+                return f"{department} {course_number} is not offered."
+
+            df_classes = self.dfs["classes"]
+            section_count_df = df_classes.loc[(df_classes["Name"].str.contains(department)) &
+                (df_classes["Name"].str.contains(course_number)) &
+                (df_classes["Term"] == self.specified_term)]
+            section_count = section_count_df.shape[0]
+            return f"{department} {course_number} is offered. There are {section_count} sections of the course. "
+
+        df_res = df.loc[(df["Department"] == department) &
+                (df["Term"] == self.specified_term)]
+        
+        if df_res.empty:
+            return f"The {department} is not offering any courses."
+
+        num_rows = df_res.shape[0]
+        output = f"There are {num_rows} {department} courses being offered: "
+        i = 0
+        while i < 3 and i < num_rows:
+            output += df_res.iloc[i]["Id"] + ", "
+            i += 1
+        if i < num_rows:
+            output += f"and {num_rows - i} others"
+        return output + "."
+
     def handleCourseQuestion(self, keywords):
         """
         Given a number of a course, return the course description
@@ -188,18 +239,6 @@ class Processor:
         return f"{courseid} is called {courseDesc}" + ("" if len(ges) < 1\
             else " and it satisfies the following general education requirements " + " ".join(ges))
 
-    # TODO
-    def handleGEsOfCourseQuestion(self, keywords):
-        return ""
-
-    # TODO
-    def handleRequirementsOfCourseQuestion(self, keywords):
-        return ""
-
-    # TODO
-    def handleNameOfClassQuestion(self, keywords):
-        return ""
-
     def handleClassDetailsQuestion(self, keywords):
         df = self.dfs["classes"]
         class_name = list(map(lambda i, j : i + " " + j, 
@@ -207,7 +246,7 @@ class Processor:
         section_number = int(keywords["section_numbers"][0])
         df_res = df.loc[(df["Name"] == class_name) & 
             (df["Section"] == section_number) &
-            (df["Term"] == self.current_term)]
+            (df["Term"] == self.specified_term)]
         if df_res.empty:
             output = "I could not find any classes that match that description."
         else:
@@ -225,7 +264,7 @@ class Processor:
         section_number = int(keywords["section_numbers"][0])
         df_res = df.loc[(df["Name"] == class_name) & 
             (df["Section"] == section_number) &
-            (df["Term"] == self.current_term)]
+            (df["Term"] == self.specified_term)]
         if df_res.empty:
             output = "I could not find any classes that match that description."
         else:
@@ -239,7 +278,7 @@ class Processor:
         professor_name = self.getProfessorNameFromKeywords(self.dfs["instructors"], keywords["instructor_names"])
         professor_name_trunc = re.search("^(.+, [A-Z]).*", professor_name)[1]
         df_res = df.loc[(df["Instructor"] == professor_name_trunc) & 
-            (df["Term"] == self.current_term)]
+            (df["Term"] == self.specified_term)]
         class_names = set(df_res["Name"])
         output = f"Professor {professor_name} is teaching {len(class_names)} classes. "
         if len(class_names) > 0:
@@ -258,7 +297,7 @@ class Processor:
         for index in indices:
             df_res = df.loc[(df["Name"] == index[0]) & 
                 (df["Section"] == index[1]) &
-                (df["Term"] == self.current_term)]
+                (df["Term"] == self.specified_term)]
             if not df_res.empty:
                 df_results.append(df_res)
         output = ""
@@ -271,6 +310,17 @@ class Processor:
                 f"{res['Days'].iloc[0]} class that starts at {res['Start Time'].iloc[0]} " + \
                 f"and ends at {res['End Time'].iloc[0]}."
         return output
+
+    def getTermIdFromKeywords(self, term_year, term_season):
+        df = self.dfs["terms"]    
+        res = df[df["Name"].str.contains(term_year) & df["Name"].str.contains(term_season)]
+        if res.empty:
+            return None
+        return res["Id"].iloc[0]
+
+    def getTermNameFromId(self, term_id):
+        df = self.dfs["terms"]
+        return df.loc[df["Id"] == term_id]["Name"]
 
     def getProfessorNameFromKeywords(self, df, namesList):
         """
@@ -285,9 +335,6 @@ class Processor:
                 # all values in names list are in this instructor name
                 return instr
         return None
-
-# Query assumptions:
-#   Term is current
 
 # === Answer is just a cell in the db ===
 # What time does CSC 482 section 02 start?

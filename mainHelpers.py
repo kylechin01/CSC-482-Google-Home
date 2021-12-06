@@ -42,6 +42,12 @@ def handleQuery(query, p, schP, wikiRet):
     resp = ""
     if qp["classification"] == "schedules":
         resp = schP.getResponse(qp)
+        if resp == "":
+            resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp)
     elif qp["classification"] == "wikipedia":
-        resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp["strQuery"])
+        resp = getResponse(wikiRet[0], wikiRet[1], wikiRet[2], qp)
+        if resp == "":
+            resp = schP.getResponse(qp)
+    if resp == "":
+        resp = "Sorry I don't know how to respond to that."
     return resp
