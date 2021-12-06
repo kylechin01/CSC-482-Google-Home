@@ -104,8 +104,8 @@ class SchedulesTest(unittest.TestCase):
         testQ("A1 GE?", ["3 courses"])
         testQ("C1 GE?", ["21 courses", "18 others"])
         testQ("F1 GE?", ["no courses"])
-        testQ("C1 ARCH GE?", ["1 course"])
-        testQ("C1 MATH GE?", ["no courses"])
+        testQ("C1 ARCH GE?", ["1 ARCH course"])
+        testQ("C1 MATH GE?", ["no MATH courses"])
 
     def test_handleNameOfCourseQuestion(self):
         def testQ(query, expectedTerms):
