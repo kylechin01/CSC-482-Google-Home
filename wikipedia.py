@@ -196,7 +196,7 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
                 return ans
 
         for ind, row in allDF[5].iterrows():
-            s = lemmatizeSent(row["Category"], nlp).lower()
+            s = " " + lemmatizeSent(row["Category"], nlp).lower() + " "
             if s in question:
                 ans = allDF[5].loc[ind, "Category"]
                 if(row['Category']=='Admit'):
