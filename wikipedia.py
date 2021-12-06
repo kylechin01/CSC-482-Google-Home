@@ -202,7 +202,7 @@ def getResponse(allDF, vec, tf_idf_sparse_sents, quesDict):
                         return ans
 
         ans = getResponseSents(allDF[4], vec, tf_idf_sparse_sents, question)
-        return ans
+        return ans.replace("\"", "")
 
 # webscrapeWikipedia()
 # ans = getResponse("What is the average GPA?")
