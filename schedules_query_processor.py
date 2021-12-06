@@ -209,11 +209,13 @@ class Processor:
         if df_res.empty:
             return f"The {department} is not offering any courses."
 
-        num_rows = df_res.shape[0]
+        course_list = df_res["Id"].drop_duplicates().tolist()
+        num_rows = len(course_list)
+
         output = f"There are {num_rows} {department} courses being offered: "
         i = 0
         while i < 3 and i < num_rows:
-            output += df_res.iloc[i]["Id"] + ", "
+            output += course_list[i] + ", "
             i += 1
         if i < num_rows:
             output += f"and {num_rows - i} others"
@@ -328,7 +330,8 @@ class Processor:
             df_res = df.loc[(df["GE"].str.contains(GE.upper())) &
                 (df["Term"] == self.specified_term)]
 
-        num_rows = df_res.shape[0]
+        course_list = df_res["Id"].drop_duplicates().tolist()
+        num_rows = len(course_list)
         
         if num_rows == 0:
             output = "There are no "
@@ -351,7 +354,7 @@ class Processor:
         output += ": "
         i = 0
         while i < 3 and i < num_rows:
-            output += df_res.iloc[i]["Id"] + ", "
+            output += course_list[i] + ", "
             i += 1
         if i < num_rows:
             output += f"and {num_rows - i} others"
