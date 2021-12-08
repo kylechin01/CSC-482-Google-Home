@@ -1,5 +1,21 @@
-spacy
-nltk
-pandas
-requests
-bs4
+
+
+# Setting up the pi
+1. Follow the steps in this section - https://aiyprojects.withgoogle.com/voice/#assembly-guide 
+2. Follow the steps in this section - https://aiyprojects.withgoogle.com/voice/#connect 
+3. Follow the steps in this section - https://aiyprojects.withgoogle.com/voice/#google-assistant 
+4. After trying to run the demo, if you encounter an error with the aiy/cloudspeech.py try adding the changes here - https://github.com/google/aiyprojects-raspbian/pull/736/files
+
+
+# setting up the flask server
+1. Install conda (python versioning) from here - https://docs.conda.io/en/latest/
+2. Replicate the packages installed by running the command in the repo:
+    conda env create -f environment.yml
+3. Set up flask by running this command
+    export FLASK_APP=assistant (Tells flaskapp to run the assistant.py)
+3. Make sure you are on the same network as the AIY home and run 
+    flask run --host=[YOUR_IP_ADDRESS]
+
+
+Tips:
+1. To find the ip address on the pi hover over the wifi icon, or run ip addr in a terminal.
