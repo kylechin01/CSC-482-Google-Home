@@ -7,7 +7,7 @@
 4. After trying to run the demo, if you encounter an error with the aiy/cloudspeech.py try adding the changes here - https://github.com/google/aiyprojects-raspbian/pull/736/files
 
 
-# setting up the flask server
+# Setting up the flask server
 1. Install conda (python versioning) from here - https://docs.conda.io/en/latest/
 2. Replicate the packages installed by running the command in the repo:
     conda env create -f environment.yml
@@ -15,6 +15,9 @@
     export FLASK_APP=assistant (Tells flaskapp to run the assistant.py)
 3. Make sure you are on the same network as the AIY home and run 
     flask run --host=[YOUR_IP_ADDRESS]
+
+4. To manually refresh the schedules data run "python schedules.py" then "python keyword_extractor.py"
+    Note: this takes about 50 minutes.
 
 
 Tips:

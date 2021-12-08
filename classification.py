@@ -25,7 +25,6 @@ class Preprocessor:
         self.schWordsUpper = {}
         if "department_codes" in self.schWords:
             self.schWordsUpper = {"department_codes": self.schWords.pop("department_codes")}
-        # TODO: include the schedules word lists here
 
     def preprocessAndClassifyQuery(self, input):
         d = self.preprocess(input)
@@ -43,7 +42,6 @@ class Preprocessor:
             - tokQuery: tokenized query by word in a 1D tuple
             - meta: a pandas dataframe with the attributes described in Preprocessor.getMeta()
         """
-        # TODO: first run query = fixQuery(query) to solve "ford mood" and similar issues
         # tokenize the string and get metadata for each token
         doc = self.nlp(input)
         metadf = self.getMeta(doc)
@@ -88,7 +86,6 @@ class Preprocessor:
             "youtube"   : answer requires a lookup through the youtube api # TODO: ask foaad if we should keep this cal poly related, or allow any songs to be played
         Returns a tuple of a string and a list of discovered categories for schedules
         """
-        # TODO
         discovered, foundKey = self.findKeyWords(query)
         discovered, foundDept = self.findKeyWordsUpper(query, discovered)
         discovered, foundReg = self.findRegex(query, discovered)

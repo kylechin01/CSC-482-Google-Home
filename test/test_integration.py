@@ -52,7 +52,3 @@ class IntegrationTest(unittest.TestCase):
 
         thq("What percent of females are at Cal Poly?")
         thq("What is the percentage of Asians?")
-
-
-        #thq("What classes does professor foaad teach next quarter?", ["Schedules", "implemented"]) # temp
-        # TODO

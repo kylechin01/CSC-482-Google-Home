@@ -35,7 +35,7 @@ def initMain():
 
 def completeWebscrape():
     webscrapeWikipedia()
-    # TODO webscrape schedules
+    # TODO add webscrape schedules in this function
 
 def handleQuery(query, p, schP, wikiRet):
     qp = p.preprocessAndClassifyQuery(query)

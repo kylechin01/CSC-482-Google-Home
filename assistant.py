@@ -72,24 +72,6 @@ def apply_edge_rules_ques(text):
         return text
     
     text = helpSwap(["cse", "tsc", "cic","clc", "esc", "cfe", "cfd", "coc", "csce", "scsc", "cfc", "vsc", "csv"], "CSC", text)
-    #if "cse" in text.lower():
-    #    text = text.replace('CSE', 'CSC', 1)
-    #elif "tsc" in text.lower():
-    #    text = text.replace('tsc', 'CSC', 1)
-    #    text = text.replace('TSC', 'CSC', 1)
-    #elif "cic" in text.lower():
-    #    text = text.replace('cic', 'CSC', 1)
-    #    text = text.replace('CIC', 'CSC', 1)
-    #elif "cfc" in text.lower():
-    #    text = text.replace('cfc', 'CSC', 1)
-    #    text = text.replace('CFC', 'CSC', 1)
-    #elif "vsc" in text.lower():
-    #    text = text.replace('vsc', 'CSC', 1)
-    #    text = text.replace('VSC', 'CSC', 1)
-    #elif "csv" in text.lower():
-    #    text = text.replace('csv', 'CSC', 1)
-    #    text = text.replace('CSV', 'CSC', 1)
-    
     
     #exporter -> next quarter
     if 'exporter' in text.lower():

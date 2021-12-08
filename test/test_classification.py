@@ -38,7 +38,6 @@ class ClassificationTest(unittest.TestCase):
         self.assertEqual(d["meta"].iloc[8]["token"], "is")
         self.assertEqual(d["meta"].iloc[8]["sentId"], 1)
         self.assertEqual(d["meta"].iloc[8]["wordId"], 2)
-        # TODO more throughoughough testing?
     
     def test_classification_empty(self):
         t1 = "This is definitely a sentence."
@@ -74,11 +73,6 @@ class ClassificationTest(unittest.TestCase):
         t("what is me to this", w)
         t("what is ME to this", s)
 
-        # TODO: classifications to fix: professor names that are also words are incorrectly classifying as 
-        # schedules queries such as black, white, sky, call, etc
-        # t("Is cal poly a good school?", w)
-        # TODO: more intense testing
-    
     def test_findReg(self):
         p = Preprocessor({})
 
